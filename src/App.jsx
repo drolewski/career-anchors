@@ -20,16 +20,19 @@ function AppContent() {
     setDemographics(data);
     setStartTime(Date.now());
     setStep(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleRatings = (data) => {
     setRatings(data);
     setStep(3);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleTop3 = (data) => {
     setTop3(data);
     setStep(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
