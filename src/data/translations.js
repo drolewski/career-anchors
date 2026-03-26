@@ -4,6 +4,7 @@ export const translations = {
       title: "Schein Career Anchors",
       subtitle: "Discover what truly drives your career decisions. First, tell us a bit about yourself.",
       footer: "Schein Career Anchors Assessment · Based on Edgar Schein's research",
+      created: "Created by ",
     },
     steps: {
       aboutYou: "About You",
@@ -206,6 +207,7 @@ export const translations = {
       title: "Kotwice Kariery Scheina",
       subtitle: "Odkryj, co naprawdę napędza Twoje decyzje zawodowe. Najpierw powiedz nam trochę o sobie.",
       footer: "Test Kotwic Kariery Scheina · Oparty na badaniach Edgara Scheina",
+      created: "Stworzony przez ",
     },
     steps: {
       aboutYou: "O Tobie",
