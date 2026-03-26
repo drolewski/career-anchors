@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { anchors } from '../data/anchors.js';
-import { sentences } from '../data/sentences.js';
 import { calculateAnchorScores } from '../lib/calculations.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useLang } from '../lib/i18n.jsx';
@@ -36,7 +35,7 @@ function AnchorBar({ code, scoreData, rank, isPrimary }) {
           </span>
           <div>
             <h3 className="font-semibold text-slate-100 text-sm sm:text-base">
-              {typeof translatedName === 'string' ? translatedName : anchor.name}
+              {translatedName}
             </h3>
             <div className="flex items-center gap-2 text-xs text-slate-500">
               <span>{code}</span>
@@ -103,7 +102,7 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
             </span>
           )}
           <h3 className="text-xl sm:text-2xl font-bold text-slate-100">
-            {typeof translatedName === 'string' ? translatedName : anchor.name}
+            {translatedName}
           </h3>
           <div className="flex items-center gap-3 mt-1 text-sm text-slate-500">
             <span>{t('results.rawAvg')}: {scoreData.rawAverage}/6</span>
@@ -120,7 +119,7 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
       </div>
 
       <p className="text-slate-300 leading-relaxed mb-5 text-sm sm:text-base">
-        {typeof translatedDesc === 'string' ? translatedDesc : anchor.description}
+        {translatedDesc}
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -129,7 +128,7 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
             {t('results.coreDrive')}
           </h4>
           <p className="text-sm text-slate-200">
-            {typeof translatedDrive === 'string' ? translatedDrive : anchor.coreDrive}
+            {translatedDrive}
           </p>
         </div>
         <div className="rounded-xl bg-slate-800/50 p-4">
@@ -137,7 +136,7 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
             {t('results.motivation')}
           </h4>
           <p className="text-sm text-slate-200">
-            {typeof translatedMotiv === 'string' ? translatedMotiv : anchor.motivation}
+            {translatedMotiv}
           </p>
         </div>
       </div>
@@ -185,7 +184,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
 
   const primaryAnchor = anchors[result.primary];
   const secondaryAnchor = anchors[result.secondary];
-  const top3Sentences = top3.map(id => sentences.find(s => s.id === id));
+  const top3Sentences = top3.map(id => Array.from({ length: 40 }, (_, i) => i + 1).find(s => s === id));
   const pairingVerb = t(`pairingVerbs.${result.primary}`);
   const secondaryDrive = t(`anchors.${result.secondary}.coreDrive`);
 
@@ -289,7 +288,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
                     className="text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full"
                     style={{ backgroundColor: (anchor?.color || '#666') + '20', color: anchor?.color || '#666' }}
                   >
-                    {code} — {typeof translatedAnchorName === 'string' ? translatedAnchorName : anchor?.name}
+                    {code} — {translatedAnchorName}
                   </span>
                 </div>
               </div>
@@ -315,9 +314,9 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
           ) : (
             <>
               Your primary anchor{' '}
-              <strong style={{ color: primaryAnchor.color }}>{primaryAnchor.name}</strong>{' '}
+              <strong style={{ color: primaryAnchor.color }}>{t(`anchors.${result.secondary}.name`)}</strong>{' '}
               combined with{' '}
-              <strong style={{ color: secondaryAnchor.color }}>{secondaryAnchor.name}</strong>{' '}
+              <strong style={{ color: secondaryAnchor.color }}>{t(`anchors.${result.secondary}.name`)}</strong>{' '}
               suggests that you thrive when you can{' '}
               {pairingVerb}{' '}
               <strong>{typeof secondaryDrive === 'string' ? secondaryDrive.toLowerCase() : secondaryAnchor.coreDrive.toLowerCase()}</strong>.

@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { sentences } from '../data/sentences.js';
 import { getAnchorForSentence, anchors } from '../data/anchors.js';
 import { useLang } from '../lib/i18n.jsx';
 
@@ -16,9 +15,9 @@ export default function Top3Step({ ratings, onNext }) {
     }
   };
 
-  const sortedSentences = [...sentences].sort((a, b) => {
-    const ra = ratings[a.id] || 0;
-    const rb = ratings[b.id] || 0;
+  const sortedSentences = [...Array.from({ length: 40 }, (_, i) => i + 1)].sort((a, b) => {
+    const ra = ratings[a] || 0;
+    const rb = ratings[b] || 0;
     return rb - ra;
   });
 

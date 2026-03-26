@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { sentences } from '../data/sentences.js';
 import SentenceCard from '../components/SentenceCard.jsx';
 import ProgressBar from '../components/ProgressBar.jsx';
 import { useLang } from '../lib/i18n.jsx';
@@ -43,12 +42,12 @@ export default function RatingStep({ ratings, onNext }) {
       <ProgressBar current={ratedCount} total={40} label={t('rating.progressLabel')} />
 
       <div className="space-y-4 mb-8">
-        {sentences.map((sentence, index) => (
+        {Array.from({ length: 40 }, (_, i) => i + 1).map((id, index) => (
           <SentenceCard
-            key={sentence.id}
-            sentence={sentence}
-            rating={currentRatings[sentence.id]}
-            onRate={(value) => handleRate(sentence.id, value)}
+            key={id}
+            sentenceId={id}
+            rating={currentRatings[id]}
+            onRate={(value) => handleRate(id, value)}
             index={index}
           />
         ))}

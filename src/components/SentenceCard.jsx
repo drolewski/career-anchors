@@ -3,9 +3,9 @@ import RatingButton from './RatingButton.jsx';
 import { getAnchorForSentence } from '../data/anchors.js';
 import { useLang } from '../lib/i18n.jsx';
 
-export default function SentenceCard({ sentence, rating, onRate, index, isTop3 }) {
+export default function SentenceCard({ sentenceId, rating, onRate, index, isTop3 }) {
   const { t } = useLang();
-  const anchorCode = getAnchorForSentence(sentence.id);
+  const anchorCode = getAnchorForSentence(sentenceId);
 
   const anchorColors = {
     TF: 'border-l-indigo-400',
@@ -18,7 +18,8 @@ export default function SentenceCard({ sentence, rating, onRate, index, isTop3 }
     LS: 'border-l-teal-400',
   };
 
-  const translatedText = t(`sentences.${sentence.id}`);
+  const translatedText = t(`sentences.${sentenceId}`);
+  console.log(translatedText);
 
   return (
     <motion.div
@@ -29,11 +30,11 @@ export default function SentenceCard({ sentence, rating, onRate, index, isTop3 }
     >
       <div className="flex items-start gap-4">
         <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-sm font-bold text-slate-400">
-          {sentence.id}
+          {sentenceId}
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-slate-200 text-sm sm:text-base leading-relaxed mb-4">
-            {typeof translatedText === 'string' ? translatedText : sentence.text}
+            {translatedText}
           </p>
           <div className="grid grid-cols-6 gap-2 sm:gap-3">
             {[1, 2, 3, 4, 5, 6].map(val => (
