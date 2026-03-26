@@ -15,7 +15,7 @@ export default function Top3Step({ ratings, onNext }) {
     }
   };
 
-  const sortedSentences = [...Array.from({ length: 40 }, (_, i) => i + 1)].sort((a, b) => {
+  const sortedSentences = Array.from({ length: 40 }, (_, i) => i + 1).sort((a, b) => {
     const ra = ratings[a] || 0;
     const rb = ratings[b] || 0;
     return rb - ra;
@@ -60,12 +60,12 @@ export default function Top3Step({ ratings, onNext }) {
       </div>
 
       <div className="space-y-3 mb-8">
-        {sortedSentences.map((sentence, index) => {
-          const isSelected = selected.includes(sentence.id);
-          const anchorCode = getAnchorForSentence(sentence.id);
+        {sortedSentences.map((id, index) => {
+          const isSelected = selected.includes(id);
+          const anchorCode = getAnchorForSentence(id);
           const anchor = anchors[anchorCode];
-          const rating = ratings[sentence.id];
-          const translatedText = t(`sentences.${sentence.id}`);
+          const rating = ratings[id];
+          const translatedText = t(`sentences.${id}`);
 
           const anchorColors = {
             TF: 'border-l-indigo-400 bg-indigo-500/5',
@@ -80,11 +80,11 @@ export default function Top3Step({ ratings, onNext }) {
 
           return (
             <motion.button
-              key={sentence.id}
+              key={id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.015 }}
-              onClick={() => toggleSelect(sentence.id)}
+              onClick={() => toggleSelect(id)}
               disabled={!isSelected && selected.length >= 3}
               className={`w-full text-left rounded-2xl p-5 border-l-4 transition-all duration-300 ${
                 isSelected
@@ -103,17 +103,17 @@ export default function Top3Step({ ratings, onNext }) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
-                    sentence.id
+                    id
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-slate-200 text-sm leading-relaxed">
-                    {typeof translatedText === 'string' ? translatedText : sentence.text}
+                    {typeof translatedText === 'string' ? translatedText : ''}
                   </p>
                   <div className="flex items-center gap-3 mt-2">
                     <span
                       className="text-xs font-medium px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: anchor.color + '20', color: anchor.color }}
+                      style={{ backgroundColor: (anchor?.color || '#666') + '20', color: anchor?.color || '#666' }}
                     >
                       {anchorCode}
                     </span>

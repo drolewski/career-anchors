@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { anchors } from '../data/anchors.js';
+import { anchors, getAnchorForSentence } from '../data/anchors.js';
 import { calculateAnchorScores } from '../lib/calculations.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useLang } from '../lib/i18n.jsx';
@@ -184,7 +184,6 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
 
   const primaryAnchor = anchors[result.primary];
   const secondaryAnchor = anchors[result.secondary];
-  const top3Sentences = top3.map(id => Array.from({ length: 40 }, (_, i) => i + 1).find(s => s === id));
   const pairingVerb = t(`pairingVerbs.${result.primary}`);
   const secondaryDrive = t(`anchors.${result.secondary}.coreDrive`);
 
@@ -265,15 +264,13 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
       <div className="glass rounded-2xl p-6 sm:p-8 mb-8">
         <h3 className="text-lg font-semibold text-slate-200 mb-4">{t('results.yourTop3')}</h3>
         <div className="space-y-3">
-          {top3Sentences.map((sentence, i) => {
-            const code = Object.entries(anchors).find(([_, a]) =>
-              a.sentenceIds.includes(sentence.id)
-            )?.[0];
+          {top3.map((id, i) => {
+            const code = getAnchorForSentence(id);
             const anchor = anchors[code];
-            const translatedText = t(`sentences.${sentence.id}`);
+            const translatedText = t(`sentences.${id}`);
             const translatedAnchorName = t(`anchors.${code}.name`);
             return (
-              <div key={sentence.id} className="flex items-start gap-3 p-4 rounded-xl bg-slate-800/50">
+              <div key={id} className="flex items-start gap-3 p-4 rounded-xl bg-slate-800/50">
                 <span
                   className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
                   style={{ backgroundColor: anchor?.color || '#666' }}
@@ -282,7 +279,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
                 </span>
                 <div>
                   <p className="text-sm text-slate-200">
-                    {typeof translatedText === 'string' ? translatedText : sentence.text}
+                    {translatedText}
                   </p>
                   <span
                     className="text-xs font-medium mt-1 inline-block px-2 py-0.5 rounded-full"
@@ -308,18 +305,18 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
               <strong style={{ color: secondaryAnchor.color }}>{t(`anchors.${result.secondary}.name`)}</strong>{' '}
               sugeruje, że najlepiej funkcjonujesz, gdy możesz{' '}
               {pairingVerb}{' '}
-              <strong>{typeof secondaryDrive === 'string' ? secondaryDrive.toLowerCase() : secondaryAnchor.coreDrive.toLowerCase()}</strong>.
+              <strong>{typeof secondaryDrive === 'string' ? secondaryDrive.toLowerCase() : ''}</strong>.
               {' '}{t('pairingEnding')}
             </>
           ) : (
             <>
               Your primary anchor{' '}
-              <strong style={{ color: primaryAnchor.color }}>{t(`anchors.${result.secondary}.name`)}</strong>{' '}
+              <strong style={{ color: primaryAnchor.color }}>{t(`anchors.${result.primary}.name`)}</strong>{' '}
               combined with{' '}
               <strong style={{ color: secondaryAnchor.color }}>{t(`anchors.${result.secondary}.name`)}</strong>{' '}
               suggests that you thrive when you can{' '}
               {pairingVerb}{' '}
-              <strong>{typeof secondaryDrive === 'string' ? secondaryDrive.toLowerCase() : secondaryAnchor.coreDrive.toLowerCase()}</strong>.
+              <strong>{typeof secondaryDrive === 'string' ? secondaryDrive.toLowerCase() : ''}</strong>.
               {' '}{t('pairingEnding')}
             </>
           )}

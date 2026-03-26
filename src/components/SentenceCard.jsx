@@ -19,7 +19,6 @@ export default function SentenceCard({ sentenceId, rating, onRate, index, isTop3
   };
 
   const translatedText = t(`sentences.${sentenceId}`);
-  console.log(translatedText);
 
   return (
     <motion.div
