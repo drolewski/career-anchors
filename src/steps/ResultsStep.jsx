@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { anchors, anchorOrder } from '../data/anchors.js';
+import { anchors } from '../data/anchors.js';
 import { sentences } from '../data/sentences.js';
 import { calculateAnchorScores } from '../lib/calculations.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
 import { useLang } from '../lib/i18n.jsx';
 
-function AnchorBar({ code, score, maxScore, rank, isPrimary }) {
+function AnchorBar({ code, scoreData, rank, isPrimary }) {
   const { t } = useLang();
   const anchor = anchors[code];
-  const percent = Math.round((score / maxScore) * 100);
+  const percent = scoreData.percentage;
   const translatedName = t(`anchors.${code}.name`);
 
   return (
@@ -38,7 +38,19 @@ function AnchorBar({ code, score, maxScore, rank, isPrimary }) {
             <h3 className="font-semibold text-slate-100 text-sm sm:text-base">
               {typeof translatedName === 'string' ? translatedName : anchor.name}
             </h3>
-            <p className="text-xs text-slate-500">{code}</p>
+            <div className="flex items-center gap-2 text-xs text-slate-500">
+              <span>{code}</span>
+              <span>·</span>
+              <span>avg {scoreData.rawAverage}</span>
+              {scoreData.top3Count > 0 && (
+                <>
+                  <span>·</span>
+                  <span className="text-amber-400">+{scoreData.top3Count}★</span>
+                </>
+              )}
+              <span>·</span>
+              <span className="text-slate-300 font-medium">{scoreData.corrected}</span>
+            </div>
           </div>
         </div>
         <span className="text-lg sm:text-xl font-bold" style={{ color: anchor.color }}>
@@ -58,10 +70,9 @@ function AnchorBar({ code, score, maxScore, rank, isPrimary }) {
   );
 }
 
-function AnchorDetail({ code, score, maxScore, isPrimary }) {
+function AnchorDetail({ code, scoreData, isPrimary }) {
   const { t } = useLang();
   const anchor = anchors[code];
-  const percent = Math.round((score / maxScore) * 100);
   const translatedName = t(`anchors.${code}.name`);
   const translatedDesc = t(`anchors.${code}.description`);
   const translatedDrive = t(`anchors.${code}.coreDrive`);
@@ -94,7 +105,17 @@ function AnchorDetail({ code, score, maxScore, isPrimary }) {
           <h3 className="text-xl sm:text-2xl font-bold text-slate-100">
             {typeof translatedName === 'string' ? translatedName : anchor.name}
           </h3>
-          <p className="text-sm text-slate-500 mt-0.5">{t('results.score')}: {percent}%</p>
+          <div className="flex items-center gap-3 mt-1 text-sm text-slate-500">
+            <span>{t('results.rawAvg')}: {scoreData.rawAverage}/6</span>
+            {scoreData.top3Count > 0 && (
+              <span className="text-amber-400">
+                {t('results.top3Bonus')}: +{scoreData.top3Count}★
+              </span>
+            )}
+            <span className="text-slate-300 font-semibold">
+              {t('results.corrected')}: {scoreData.corrected}
+            </span>
+          </div>
         </div>
       </div>
 
@@ -128,7 +149,6 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
   const { t } = useLang();
   const [saved, setSaved] = useState(false);
   const result = calculateAnchorScores(ratings, top3);
-  const maxPossible = result.sorted[0].maxPossible;
 
   useEffect(() => {
     async function saveResult() {
@@ -167,6 +187,9 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
   const pairingVerb = t(`pairingVerbs.${result.primary}`);
   const secondaryDrive = t(`anchors.${result.secondary}.coreDrive`);
 
+  // Check if Top3 changed the ranking
+  const rankingChanged = result.rawSorted[0].code !== result.sorted[0].code;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -199,8 +222,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
       <div className="mb-8">
         <AnchorDetail
           code={result.primary}
-          score={result.scores[result.primary].raw}
-          maxScore={maxPossible}
+          scoreData={result.scores[result.primary]}
           isPrimary={true}
         />
       </div>
@@ -211,21 +233,27 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
         </h3>
         <AnchorDetail
           code={result.secondary}
-          score={result.scores[result.secondary].raw}
-          maxScore={maxPossible}
+          scoreData={result.scores[result.secondary]}
           isPrimary={false}
         />
       </div>
 
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-slate-200 mb-4">{t('results.allAnchors')}</h3>
+        {rankingChanged && (
+          <div className="glass rounded-xl p-3 mb-4 flex items-center gap-2 text-xs text-amber-300">
+            <svg className="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {t('results.rankingChanged')}
+          </div>
+        )}
         <div className="space-y-3">
           {result.sorted.map((item, index) => (
             <AnchorBar
               key={item.code}
               code={item.code}
-              score={item.raw}
-              maxScore={maxPossible}
+              scoreData={result.scores[item.code]}
               rank={index}
               isPrimary={index === 0}
             />

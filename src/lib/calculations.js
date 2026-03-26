@@ -14,35 +14,49 @@ export function getGeneration(birthYear, lang = 'en') {
 
 export function calculateAnchorScores(ratings, top3) {
   const scores = {};
-  const bonusMultiplier = 2;
+  const CORRECTION_WEIGHT = 1.5;
+  const CORRECTION_BONUS = 1.0;
 
   for (const code of anchorOrder) {
     const anchor = anchors[code];
-    let score = 0;
+
+    let rawSum = 0;
+    let top3Count = 0;
 
     for (const sentenceId of anchor.sentenceIds) {
       const rating = ratings[sentenceId] || 0;
-      score += rating;
-
+      rawSum += rating;
       if (top3.includes(sentenceId)) {
-        score += rating * bonusMultiplier;
+        top3Count++;
       }
     }
 
+    const rawAverage = rawSum / anchor.sentenceIds.length;
+
+    const corrected = (rawAverage * CORRECTION_WEIGHT) + (CORRECTION_BONUS * top3Count);
+    const maxCorrected = (6.0 * CORRECTION_WEIGHT) + (CORRECTION_BONUS * anchor.sentenceIds.length);
+
     scores[code] = {
-      raw: score,
-      maxPossible: 5 * 6 + 5 * 6 * bonusMultiplier,
-      percentage: Math.round((score / (5 * 6 + 5 * 6 * bonusMultiplier)) * 100),
+      rawSum,
+      rawAverage: Math.round(rawAverage * 100) / 100,
+      top3Count,
+      corrected: Math.round(corrected * 100) / 100,
+      percentage: Math.round((corrected / maxCorrected) * 100),
     };
   }
 
   const sorted = anchorOrder
     .map(code => ({ code, ...scores[code] }))
-    .sort((a, b) => b.raw - a.raw);
+    .sort((a, b) => b.corrected - a.corrected);
+
+  const rawSorted = anchorOrder
+    .map(code => ({ code, rawAverage: scores[code].rawAverage }))
+    .sort((a, b) => b.rawAverage - a.rawAverage);
 
   return {
     scores,
     sorted,
+    rawSorted,
     primary: sorted[0].code,
     secondary: sorted[1].code,
     topThree: sorted.slice(0, 3),

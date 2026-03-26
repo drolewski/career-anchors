@@ -82,6 +82,10 @@ export const translations = {
       saved: "✓ Your response has been saved for analysis",
       saving: "Saving your response...",
       configSupabase: "Configure Supabase to save responses. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env",
+      rawAvg: "Raw avg",
+      top3Bonus: "Top3 bonus",
+      corrected: "Corrected",
+      rankingChanged: "Your Top 3 choices changed the final ranking!",
       takeAgain: "Take the Test Again",
     },
     pairingVerbs: {
@@ -280,6 +284,10 @@ export const translations = {
       saved: "✓ Twoja odpowiedź została zapisana do analizy",
       saving: "Zapisywanie odpowiedzi...",
       configSupabase: "Skonfiguruj Supabase, aby zapisywać odpowiedzi. Ustaw VITE_SUPABASE_URL i VITE_SUPABASE_ANON_KEY w .env",
+      rawAvg: "Średnia",
+      top3Bonus: "Bonus Top3",
+      corrected: "Skorygowane",
+      rankingChanged: "Twój wybór Top 3 zmienił końcową kolejność!",
       takeAgain: "Wypełnij test ponownie",
     },
     pairingVerbs: {
