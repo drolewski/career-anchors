@@ -36,6 +36,7 @@ CREATE TABLE schein_responses (
   anchor_scores JSONB,
   primary_anchor TEXT,
   secondary_anchor TEXT,
+  tertiary_anchor TEXT,
 
   -- Metadata
   completed_at TIMESTAMPTZ,

@@ -59,6 +59,7 @@ export function calculateAnchorScores(ratings, top3) {
     rawSorted,
     primary: sorted[0].code,
     secondary: sorted[1].code,
+    tertiary: sorted[2].code,
     topThree: sorted.slice(0, 3),
   };
 }
