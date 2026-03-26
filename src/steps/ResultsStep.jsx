@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { anchors } from '../data/anchors.js';
 import { sentences } from '../data/sentences.js';
@@ -148,11 +148,13 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
 export default function ResultsStep({ demographics, ratings, top3, startTime }) {
   const { t } = useLang();
   const [saved, setSaved] = useState(false);
+  const savingRef = useRef(false);
   const result = calculateAnchorScores(ratings, top3);
 
   useEffect(() => {
     async function saveResult() {
-      if (!isSupabaseConfigured() || saved) return;
+      if (!isSupabaseConfigured() || savingRef.current) return;
+      savingRef.current = true;
 
       const payload = {
         birth_year: parseInt(demographics.birthYear),
