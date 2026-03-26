@@ -35,7 +35,7 @@ export default function SentenceCard({ sentence, rating, onRate, index, isTop3 }
           <p className="text-slate-200 text-sm sm:text-base leading-relaxed mb-4">
             {typeof translatedText === 'string' ? translatedText : sentence.text}
           </p>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="grid grid-cols-6 gap-2 sm:gap-3">
             {[1, 2, 3, 4, 5, 6].map(val => (
               <RatingButton
                 key={val}
