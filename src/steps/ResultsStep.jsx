@@ -167,7 +167,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
         anchor_scores: result.scores,
         primary_anchor: result.primary,
         secondary_anchor: result.secondary,
-        tertiary: result.tertiary,
+        tertiary_anchor: result.tertiary,
         completed_at: new Date().toISOString(),
         duration_seconds: Math.round((Date.now() - startTime) / 1000),
       };
