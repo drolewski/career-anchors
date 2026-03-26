@@ -14,7 +14,7 @@ export const translations = {
     demographics: {
       personalInfo: "Personal Information",
       yearOfBirth: "Year of Birth *",
-      yearPlaceholder: "e.g. 1990",
+      yearPlaceholder: "Select year...",
       generation: "Generation",
       currentPosition: "Current Position *",
       selectPosition: "Select position...",
@@ -216,7 +216,7 @@ export const translations = {
     demographics: {
       personalInfo: "Informacje osobiste",
       yearOfBirth: "Rok urodzenia *",
-      yearPlaceholder: "np. 1990",
+      yearPlaceholder: "Wybierz rok...",
       generation: "Pokolenie",
       currentPosition: "Aktualne stanowisko *",
       selectPosition: "Wybierz stanowisko...",
