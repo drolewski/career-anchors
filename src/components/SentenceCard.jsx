@@ -1,9 +1,10 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import RatingButton from './RatingButton.jsx';
 import { getAnchorForSentence } from '../data/anchors.js';
 import { useLang } from '../lib/i18n.jsx';
 
-export default function SentenceCard({ sentenceId, rating, onRate, index, isTop3 }) {
+const SentenceCard = forwardRef(function SentenceCard({ sentenceId, rating, onRate, index, isTop3 }, ref) {
   const { t } = useLang();
   const anchorCode = getAnchorForSentence(sentenceId);
 
@@ -22,6 +23,7 @@ export default function SentenceCard({ sentenceId, rating, onRate, index, isTop3
 
   return (
     <motion.div
+      ref={ref}
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: index * 0.02 }}
@@ -61,4 +63,6 @@ export default function SentenceCard({ sentenceId, rating, onRate, index, isTop3
       )}
     </motion.div>
   );
-}
+});
+
+export default SentenceCard;

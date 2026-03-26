@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import SentenceCard from '../components/SentenceCard.jsx';
 import ProgressBar from '../components/ProgressBar.jsx';
@@ -8,12 +8,33 @@ export default function RatingStep({ ratings, onNext }) {
   const { t } = useLang();
   const [currentRatings, setCurrentRatings] = useState(ratings || {});
   const ratedCount = Object.keys(currentRatings).length;
+  const cardRefs = useRef([]);
+
+  const scrollToNext = useCallback((currentId) => {
+    for (let nextId = currentId + 1; nextId <= 40; nextId++) {
+      if (!currentRatings[nextId]) {
+        const el = cardRefs.current[nextId - 1];
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }, 150);
+        }
+        return;
+      }
+    }
+  }, [currentRatings]);
 
   const handleRate = (sentenceId, value) => {
-    setCurrentRatings(prev => ({ ...prev, [sentenceId]: value }));
+    const wasRated = !!currentRatings[sentenceId];
+    const updated = { ...currentRatings, [sentenceId]: value };
+    setCurrentRatings(updated);
+
+    if (!wasRated) {
+      scrollToNext(sentenceId);
+    }
   };
 
-  const allRated = ratedCount === 40;
+  const allRated = Object.keys(currentRatings).length === 40;
 
   return (
     <motion.div
@@ -39,12 +60,13 @@ export default function RatingStep({ ratings, onNext }) {
         </p>
       </div>
 
-      <ProgressBar current={ratedCount} total={40} label={t('rating.progressLabel')} />
+      <ProgressBar current={Object.keys(currentRatings).length} total={40} label={t('rating.progressLabel')} />
 
       <div className="space-y-4 mb-8">
         {Array.from({ length: 40 }, (_, i) => i + 1).map((id, index) => (
           <SentenceCard
             key={id}
+            ref={(el) => { cardRefs.current[index] = el; }}
             sentenceId={id}
             rating={currentRatings[id]}
             onRate={(value) => handleRate(id, value)}
@@ -68,7 +90,7 @@ export default function RatingStep({ ratings, onNext }) {
                 </svg>
               </>
             ) : (
-              t('rating.ratedOf40', { count: ratedCount })
+              t('rating.ratedOf40', { count: Object.keys(currentRatings).length })
             )}
           </button>
         </div>
