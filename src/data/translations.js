@@ -31,17 +31,17 @@ export const translations = {
     positions: [
       "Junior Specialist", "Specialist", "Senior Specialist", "Team Lead",
       "Manager", "Senior Manager", "Director", "VP / C-Level",
-      "Consultant", "Freelancer", "Student", "Other",
+      "Consultant", "Freelancer", "Student", "Pensioner", "Other",
     ],
     branches: [
       "IT / Technology", "Marketing / Sales", "Finance / Accounting",
       "HR / People", "Operations", "Product / Design", "Engineering",
-      "Legal", "Healthcare", "Education", "Research", "Other",
+      "Legal", "Healthcare", "Education", "Research", "Construction", "Pensioner", "Other",
     ],
     industries: [
       "Technology / Software", "Finance / Banking", "Healthcare / Pharma",
       "Manufacturing", "Retail / E-commerce", "Consulting", "Media / Entertainment",
-      "Education", "Government", "Non-profit", "Energy", "Other",
+      "Education", "Government", "Non-profit", "Energy", "Construction", "Pensioner", "Other",
     ],
     rating: {
       title: "Rate Each Sentence",
@@ -234,17 +234,17 @@ export const translations = {
     positions: [
       "Młodszy specjalista", "Specjalista", "Starszy specjalista", "Lider zespołu",
       "Menedżer", "Starszy menedżer", "Dyrektor", "VP / C-Level",
-      "Konsultant", "Freelancer", "Student", "Inne",
+      "Konsultant", "Freelancer", "Student", "Emeryt / Rencista", "Inne",
     ],
     branches: [
       "IT / Technologia", "Marketing / Sprzedaż", "Finanse / Księgowość",
       "HR / Kadry", "Operacje", "Produkt / Design", "Inżynieria",
-      "Prawo", "Opieka zdrowotna", "Edukacja", "Badania", "Inne",
+      "Prawo", "Opieka zdrowotna", "Edukacja", "Badania", "Budowlana", "Emeryt / Rencista", "Inne",
     ],
     industries: [
       "Technologia / Oprogramowanie", "Finanse / Bankowość", "Ochrona zdrowia / Farmacja",
       "Produkcja", "Handel / E-commerce", "Konsulting", "Media / Rozrywka",
-      "Edukacja", "Administracja publiczna", "Sektor pozarządowy", "Energia", "Inne",
+      "Edukacja", "Administracja publiczna", "Sektor pozarządowy", "Energia", "Budowlana", "Emeryt / Rencista", "Inne",
     ],
     rating: {
       title: "Oceń każde zdanie",
