@@ -65,7 +65,7 @@ export default function DemographicsStep({ data, onNext }) {
                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
               >
                 <option value="">{t('demographics.yearPlaceholder')}</option>
-                {Array.from({ length: 2012 - 1964 + 1 }, (_, i) => 2012 - i).map(year => (
+                {Array.from({ length: 2012 - 1946 + 1 }, (_, i) => 2012 - i).map(year => (
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
