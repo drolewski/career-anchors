@@ -8,6 +8,7 @@ import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
 import AntiBotCheck from './components/AntiBotCheck.jsx';
 import { useLang } from './lib/i18n.jsx';
+import { Analytics } from "@vercel/analytics/react"
 
 function AppContent() {
   const [step, setStep] = useState(1);
@@ -110,6 +111,7 @@ function App() {
   return (
     <LanguageProvider>
       <AppContent />
+      <Analytics/>
     </LanguageProvider>
   );
 }
