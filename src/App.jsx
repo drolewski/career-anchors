@@ -6,6 +6,7 @@ import DemographicsStep from './steps/DemographicsStep.jsx';
 import RatingStep from './steps/RatingStep.jsx';
 import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
+import AntiBotCheck from './components/AntiBotCheck.jsx';
 import { useLang } from './lib/i18n.jsx';
 
 function AppContent() {
@@ -14,7 +15,16 @@ function AppContent() {
   const [ratings, setRatings] = useState({});
   const [top3, setTop3] = useState([]);
   const [startTime, setStartTime] = useState(null);
+  const [botVerified, setBotVerified] = useState(() => {
+    const stored = sessionStorage.getItem('bot_verified');
+    return stored === 'true';
+  });
   const { t } = useLang();
+
+  const handleBotVerified = () => {
+    setBotVerified(true);
+    sessionStorage.setItem('bot_verified', 'true');
+  };
 
   const handleDemographics = (data) => {
     setDemographics(data);
@@ -35,6 +45,20 @@ function AppContent() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
+
+  if (!botVerified) {
+    return (
+      <div className="min-h-screen py-8 px-4 sm:px-6">
+        <LanguageSwitcher />
+        <div className="max-w-md w-full mx-auto">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+            <span className="gradient-text">{t('app.title')}</span>
+          </h1>
+          <AntiBotCheck onVerified={handleBotVerified} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6">

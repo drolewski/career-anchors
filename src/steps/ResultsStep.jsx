@@ -153,6 +153,13 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
   useEffect(() => {
     async function saveResult() {
       if (!isSupabaseConfigured() || savingRef.current) return;
+      
+      const alreadySubmitted = sessionStorage.getItem('already_submitted');
+      if (alreadySubmitted) {
+        console.log('Submission blocked: already submitted in this session');
+        return;
+      }
+      
       savingRef.current = true;
 
       const payload = {
@@ -175,7 +182,10 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
       try {
         const { error } = await supabase.from('schein_responses').insert(payload);
         if (error) console.error('Save error:', error);
-        else setSaved(true);
+        else {
+          setSaved(true);
+          sessionStorage.setItem('already_submitted', 'true');
+        }
       } catch (err) {
         console.error('Save error:', err);
       }
