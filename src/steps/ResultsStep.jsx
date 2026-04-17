@@ -180,16 +180,9 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
       };
 
       try {
-        const res = await fetch('/api/save-result', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        
-        if (!res.ok) {
-          const data = await res.json();
-          console.error('Save error:', data.error || 'Unknown error');
-        } else {
+        const { error } = await supabase.from('schein_responses').insert(payload);
+        if (error) console.error('Save error:', error);
+        else {
           setSaved(true);
           sessionStorage.setItem('already_submitted', 'true');
         }
