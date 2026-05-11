@@ -46,6 +46,7 @@ export default function IndustryStats({ data }) {
 
   const chartData = industries.map(industry => {
     const item = data[industry];
+    const translatedIndustry = t(`stats.industryTranslations.${industry}`) || industry;
 
     const rawPercentages = {};
     anchorOrder.forEach(code => {
@@ -72,8 +73,8 @@ export default function IndustryStats({ data }) {
     }
 
     const row = {
-      name: industry,
-      fullName: industry,
+      name: translatedIndustry,
+      fullName: translatedIndustry,
       total: item.total,
       ...roundedPercentages,
     };
