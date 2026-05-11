@@ -6,3 +6,4 @@ export { default as AnchorPairs } from './AnchorPairs.jsx';
 export { default as IndustryStats } from './IndustryStats.jsx';
 export { default as StatsFilters } from './StatsFilters.jsx';
 export { default as Top3Anchors } from './Top3Anchors.jsx';
+export { TwoLineTick, RotatedTwoLineTick } from './CustomTicks.jsx';

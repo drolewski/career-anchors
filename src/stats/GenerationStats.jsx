@@ -11,6 +11,7 @@ import {
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
+import { TwoLineTick } from './CustomTicks.jsx';
 
 const anchorColors = {
   TF: '#818CF8',
@@ -116,13 +117,14 @@ export default function GenerationStats({ data }) {
       </h2>
       <div className="h-72 sm:h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 10 }}>
+          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 40 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis
               dataKey="name"
-              tick={{ fill: '#94A3B8', fontSize: 13 }}
+              tick={<TwoLineTick fontSize={11} />}
               tickLine={{ stroke: '#334155' }}
               axisLine={{ stroke: '#334155' }}
+              interval={0}
             />
             <YAxis
               tick={{ fill: '#94A3B8', fontSize: 13 }}

@@ -11,6 +11,7 @@ import {
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
+import { TwoLineTick, RotatedTwoLineTick } from './CustomTicks.jsx';
 
 const anchorColors = {
   TF: '#818CF8',
@@ -56,8 +57,6 @@ export default function Top3Anchors({ data, total }) {
       </div>
     );
   }
-
-  const displayTotal = total > 0 ? total : 1;
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length && payload[0]) {
@@ -121,17 +120,13 @@ export default function Top3Anchors({ data, total }) {
 
       <div className="h-64 sm:h-72">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 50 }}>
+          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 40 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis
               dataKey="name"
-              tick={{ fill: '#94A3B8', fontSize: 10 }}
+              tick={<TwoLineTick fontSize={10} />}
               tickLine={{ stroke: '#334155' }}
               axisLine={{ stroke: '#334155' }}
-              angle={-45}
-              textAnchor="end"
-              textDecoration={'elipsis'}
-              height={70}
               interval={0}
             />
             <YAxis
