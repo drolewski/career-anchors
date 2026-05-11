@@ -26,11 +26,32 @@ const anchorColors = {
 
 export default function IndustryStats({ data }) {
   const { lang } = useLang();
-  const t = (key) => {
-    const keys = key.split('.');
-    let val = translations[lang];
-    for (const k of keys) val = val?.[k];
-    return val || key;
+
+  const getIndustryTranslation = (industryName) => {
+    const industryTranslations = translations[lang]?.stats?.industryTranslations || {};
+    const entries = Object.entries(industryTranslations);
+    
+    for (const [pl, en] of entries) {
+      const normalizedPl = pl.toLowerCase().trim();
+      const normalizedEn = en.toLowerCase().trim();
+      const normalizedIndustry = industryName.toLowerCase().trim();
+      
+      if (normalizedIndustry === normalizedPl || 
+          normalizedIndustry === normalizedEn ||
+          normalizedPl.includes(normalizedIndustry) ||
+          normalizedIndustry.includes(normalizedPl)) {
+        return lang === 'en' ? en : pl;
+      }
+      
+      const plBase = normalizedPl.split('/')[0].trim();
+      const enBase = normalizedEn.split('/')[0].trim();
+      if (normalizedIndustry === plBase || normalizedIndustry === enBase ||
+          plBase === normalizedIndustry || enBase === normalizedIndustry) {
+        return lang === 'en' ? en : pl;
+      }
+    }
+    
+    return industryName;
   };
 
   const industries = Object.keys(data).filter(ind => data[ind]?.total >= 3);
@@ -46,7 +67,7 @@ export default function IndustryStats({ data }) {
 
   const chartData = industries.map(industry => {
     const item = data[industry];
-    const translatedIndustry = t(`stats.industryTranslations.${industry}`) || industry;
+    const translatedIndustry = getIndustryTranslation(industry);
 
     const rawPercentages = {};
     anchorOrder.forEach(code => {
@@ -85,10 +106,10 @@ export default function IndustryStats({ data }) {
     return (
       <div className="glass rounded-xl p-4 sm:p-6">
         <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
-          {t('stats.anchorsByIndustry')}
+          {lang === 'pl' ? 'Kotwice wg branży' : 'Anchors by Industry'}
         </h2>
         <div className="h-64 flex items-center justify-center text-slate-500">
-          {t('stats.industryHint')}
+          {lang === 'pl' ? 'Brak danych' : 'No data'}
         </div>
       </div>
     );
@@ -99,6 +120,7 @@ export default function IndustryStats({ data }) {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const industryData = chartData.find(g => g.fullName === payload[0].payload.fullName);
+      const anchorTranslations = translations[lang]?.anchors || {};
       return (
         <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50 max-w-xs">
           <p className="font-semibold text-slate-100 mb-2">
@@ -107,7 +129,7 @@ export default function IndustryStats({ data }) {
           </p>
           {payload.map((entry, index) => (
             <p key={index} style={{ color: entry.color }} className="text-sm">
-              {t(`anchors.${entry.name}.name`)}: <span className="font-semibold">{entry.value}%</span>
+              {anchorTranslations[entry.name]?.name || entry.name}: <span className="font-semibold">{entry.value}%</span>
             </p>
           ))}
         </div>
@@ -116,23 +138,22 @@ export default function IndustryStats({ data }) {
     return null;
   };
 
-  const chartDescription = chartData.map(ind => 
-    `${ind.name}: ${ind.total > 0 ? Object.entries(ind)
-      .filter(([k]) => anchorOrder.includes(k))
-      .map(([k, v]) => `${t(`anchors.${k}.name`)} ${v}%`)
-      .join(', ') : 'No data'}`).join('. ');
-
   return (
     <div className="glass rounded-xl p-4 sm:p-6">
       <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
-        {t('stats.anchorsByIndustry')}
+        {lang === 'pl' ? 'Kotwice wg branży' : 'Anchors by Industry'}
         <span className="text-slate-400 text-base ml-2">({totalResponses})</span>
       </h2>
       <figure>
-        <span className="sr-only">{chartDescription}</span>
         <div className="h-64 sm:h-80">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'} role="img" aria-label={t('stats.anchorsByIndustry') + ': ' + chartDescription}>
+            <BarChart 
+              data={chartData} 
+              margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} 
+              layout={isMobile ? 'vertical' : 'horizontal'}
+              role="img" 
+              aria-label={lang === 'pl' ? `Kotwice wg branży: ${chartData.map(i => i.fullName).join(', ')}` : `Anchors by industry: ${chartData.map(i => i.fullName).join(', ')}`}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               {isMobile ? (
                 <YAxis
@@ -171,23 +192,23 @@ export default function IndustryStats({ data }) {
                   domain={[0, 100]}
                   tickFormatter={(v) => `${v}%`}
                   width={40}
-              />
-            )}
-            <Tooltip content={<CustomTooltip />} />
-            {isMobile ? null : (
-              <Legend
-                wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
-                formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
-              />
-            )}
-            {anchorOrder.map(code => (
-              <Bar key={code} dataKey={code} fill={anchorColors[code]} stackId="stack" />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
+                />
+              )}
+              <Tooltip content={<CustomTooltip />} />
+              {isMobile ? null : (
+                <Legend
+                  wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
+                  formatter={(value) => <span style={{ color: '#94A3B8' }}>{translations[lang]?.anchors?.[value]?.name || value}</span>}
+                />
+              )}
+              {anchorOrder.map(code => (
+                <Bar key={code} dataKey={code} fill={anchorColors[code]} stackId="stack" />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
         </div>
         <figcaption className="mt-4 text-xs text-slate-500 text-center">
-          {t('stats.industryHint')}
+          {lang === 'pl' ? 'Pokazuje branże z min. 3 odpowiedziami' : 'Showing industries with at least 3 responses'}
         </figcaption>
       </figure>
     </div>
