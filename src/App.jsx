@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { LanguageProvider } from './lib/i18n.jsx';
 import LanguageSwitcher from './components/LanguageSwitcher.jsx';
+import Header from './components/Header.jsx';
 import StepIndicator from './components/StepIndicator.jsx';
 import DemographicsStep from './steps/DemographicsStep.jsx';
 import RatingStep from './steps/RatingStep.jsx';
 import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
 import AntiBotCheck from './components/AntiBotCheck.jsx';
+import StatsPage from './stats/StatsPage.jsx';
 import { useLang } from './lib/i18n.jsx';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -64,7 +67,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6">
-      <LanguageSwitcher />
+      <Header />
       <div className="max-w-3xl mx-auto">
         <StepIndicator current={step} />
 
@@ -110,11 +113,16 @@ function AppContent() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <AppContent />
-      <Analytics/>
-      <SpeedInsights/>
-    </LanguageProvider>
+    <BrowserRouter>
+      <LanguageProvider>
+        <Routes>
+          <Route path="/" element={<AppContent />} />
+          <Route path="/stats" element={<StatsPage />} />
+        </Routes>
+        <Analytics/>
+        <SpeedInsights/>
+      </LanguageProvider>
+    </BrowserRouter>
   );
 }
 

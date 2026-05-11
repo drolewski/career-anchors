@@ -1,0 +1,148 @@
+import { useLang } from '../lib/i18n.jsx';
+import { translations } from '../data/translations.js';
+import { useState } from 'react';
+
+const anchorColors = {
+  TF: '#818CF8',
+  GM: '#F59E0B',
+  AU: '#10B981',
+  SE: '#6366F1',
+  EC: '#EF4444',
+  SV: '#EC4899',
+  CH: '#F97316',
+  LS: '#14B8A6',
+};
+
+export default function AnchorPairs({ data, total }) {
+  const { lang } = useLang();
+  const t = (key) => {
+    const keys = key.split('.');
+    let val = translations[lang];
+    for (const k of keys) val = val?.[k];
+    return val || key;
+  };
+  const [showAll, setShowAll] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: 'count', direction: 'desc' });
+
+  const sortedPairs = Object.entries(data).sort((a, b) => {
+    const [a1, a2] = a[0].split('+');
+    const [b1, b2] = b[0].split('+');
+    const aPercentage = ((a[1] / total) * 100).toFixed(1);
+    const bPercentage = ((b[1] / total) * 100).toFixed(1);
+
+    if (sortConfig.key === 'count') {
+      return sortConfig.direction === 'desc' ? b[1] - a[1] : a[1] - b[1];
+    }
+    if (sortConfig.key === 'percentage') {
+      return sortConfig.direction === 'desc' ? bPercentage - aPercentage : aPercentage - bPercentage;
+    }
+    if (sortConfig.key === 'pair') {
+      const aName = `${t(`anchors.${a1}.name`)}+${t(`anchors.${a2}.name`)}`;
+      const bName = `${t(`anchors.${b1}.name`)}+${t(`anchors.${b2}.name`)}`;
+      return sortConfig.direction === 'desc' ? bName.localeCompare(aName) : aName.localeCompare(bName);
+    }
+    return 0;
+  }).slice(0, showAll ? 20 : 10);
+
+  const handleSort = (key) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'desc' ? 'asc' : 'desc',
+    }));
+  };
+
+  const SortIcon = ({ column }) => {
+    if (sortConfig.key !== column) {
+      return <span className="ml-1 text-slate-600">↕</span>;
+    }
+    return <span className="ml-1 text-cyan-400">{sortConfig.direction === 'desc' ? '↓' : '↑'}</span>;
+  };
+
+  if (Object.keys(data).length === 0) {
+    return (
+      <div className="glass rounded-xl p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
+          {t('stats.anchorPairs')}
+        </h2>
+        <div className="h-32 flex items-center justify-center text-slate-500">
+          {t('stats.noData')}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="glass rounded-xl p-4 sm:p-6">
+      <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
+        {t('stats.anchorPairs')}
+      </h2>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[400px]">
+          <thead>
+            <tr className="border-b border-slate-700">
+              <th className="text-left py-3 px-3 text-sm font-medium text-slate-400">#</th>
+              <th
+                className="text-left py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                onClick={() => handleSort('pair')}
+              >
+                {t('stats.pair')} <SortIcon column="pair" />
+              </th>
+              <th
+                className="text-right py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                onClick={() => handleSort('count')}
+              >
+                {t('stats.count')} <SortIcon column="count" />
+              </th>
+              <th
+                className="text-right py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                onClick={() => handleSort('percentage')}
+              >
+                % <SortIcon column="percentage" />
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedPairs.map(([pair, count], index) => {
+              const [a1, a2] = pair.split('+');
+              const percentage = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
+              return (
+                <tr key={pair} className="border-b border-slate-800 hover:bg-slate-800/30 transition-colors">
+                  <td className="py-3 px-3 text-sm text-slate-500">{index + 1}</td>
+                  <td className="py-3 px-3">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: anchorColors[a1] }}
+                        />
+                        <span className="text-sm text-slate-200">{t(`anchors.${a1}.name`)}</span>
+                      </div>
+                      <span className="text-slate-600">+</span>
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          style={{ backgroundColor: anchorColors[a2] }}
+                        />
+                        <span className="text-sm text-slate-200">{t(`anchors.${a2}.name`)}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3 px-3 text-right text-sm font-medium text-cyan-400">{count}</td>
+                  <td className="py-3 px-3 text-right text-sm text-slate-400">{percentage}%</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      {Object.keys(data).length > 10 && (
+        <button
+          onClick={() => setShowAll(!showAll)}
+          className="mt-4 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+        >
+          {showAll ? t('stats.showLess') : t('stats.showAll')}
+        </button>
+      )}
+    </div>
+  );
+}
