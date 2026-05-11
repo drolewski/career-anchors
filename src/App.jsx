@@ -10,6 +10,7 @@ import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
 import StatsPage from './stats/StatsPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
 import { useLang } from './lib/i18n.jsx';
 import { useLocalStorage, SESSION_KEYS } from './lib/useSessionStorage.js';
 import { Analytics } from "@vercel/analytics/react";
@@ -183,6 +184,7 @@ function App() {
           <Route path="/" element={<AppContent />} />
           <Route path="/stats" element={<StatsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
         <Analytics/>
         <SpeedInsights/>
