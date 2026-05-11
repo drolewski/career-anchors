@@ -148,18 +148,25 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
   const { t, lang } = useLang();
   const [saved, setSaved] = useState(false);
   const result = calculateAnchorScores(ratings, top3);
+  const saveAttemptedRef = useRef(false);
 
   useEffect(() => {
+    if (saveAttemptedRef.current) return;
+    saveAttemptedRef.current = true;
+
     async function saveResult() {
-      if (!isSupabaseConfigured()) return;
-      
-      const alreadySubmitted = localStorage.getItem('already_submitted');
-      if (alreadySubmitted) {
-        console.log('Submission blocked: already submitted in this session');
+      if (!isSupabaseConfigured()) {
+        console.log('Supabase not configured');
         return;
       }
       
+      const alreadySubmitted = localStorage.getItem('already_submitted');
+      if (alreadySubmitted) {
+        console.log('Submission blocked: already submitted');
+        return;
+      }
 
+      console.log('Saving result to Supabase...');
       const payload = {
         birth_year: parseInt(demographics.birthYear),
         generation: demographics.generation,
@@ -178,9 +185,12 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
       };
 
       try {
+        console.log('Payload:', payload);
         const { error } = await supabase.from('schein_responses').insert(payload);
-        if (error) console.error('Save error:', error);
-        else {
+        if (error) {
+          console.error('Save error:', error);
+        } else {
+          console.log('Saved successfully!');
           setSaved(true);
           localStorage.setItem('already_submitted', 'true');
         }
