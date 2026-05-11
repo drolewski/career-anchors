@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Anchor icon -->
+  <g transform="translate(600,200)" fill="none" stroke="url(#g)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="20" r="25" fill="url(#g)"/>
+    <line x1="0" y1="45" x2="0" y2="180"/>
+    <path d="M-80,100 Q-80,180 0,180 Q80,180 80,100"/>
+    <line x1="-65" y1="75" x2="65" y2="75"/>
+  </g>
+  
+  <!-- Title -->
+  <text x="600" y="420" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="52" font-weight="700" fill="white">
+    Kotwice Kariery Scheina
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="480" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="400" fill="#94A3B8">
+    Odkryj swój prawdziwy potencjał zawodowy
+  </text>
+  
+  <!-- URL -->
+  <text x="600" y="560" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="500" fill="#6366F1">
+    career-anchors.pl
+  </text>
+</svg>
