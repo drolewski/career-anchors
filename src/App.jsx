@@ -8,7 +8,6 @@ import DemographicsStep from './steps/DemographicsStep.jsx';
 import RatingStep from './steps/RatingStep.jsx';
 import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
-import AntiBotCheck from './components/AntiBotCheck.jsx';
 import StatsPage from './stats/StatsPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import { useLang } from './lib/i18n.jsx';
@@ -20,19 +19,12 @@ function AppContent() {
   const [demographics, setDemographics, removeDemographics] = useLocalStorage(SESSION_KEYS.DEMOGRAPHICS, {});
   const [ratings, setRatings, removeRatings] = useLocalStorage(SESSION_KEYS.RATINGS, {});
   const [top3, setTop3, removeTop3] = useLocalStorage(SESSION_KEYS.TOP3, []);
-  const [savedStep, setSavedStep, removeSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
+  const [savedStep, setSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
   const [previousResult] = useLocalStorage(SESSION_KEYS.PREVIOUS_RESULT, null);
   const [wantsRetake, setWantsRetake] = useState(false);
   const [step, setStep] = useState(1);
   const [top3Ratings, setTop3Ratings] = useState({});
   const [startTime, setStartTime] = useState(null);
-  
-  const [botVerified, setBotVerified] = useState(() => {
-    if (localStorage.getItem(SESSION_KEYS.PREVIOUS_RESULT) || localStorage.getItem(SESSION_KEYS.DEMOGRAPHICS)) {
-      return true;
-    }
-    return localStorage.getItem('bot_verified') === 'true';
-  });
   
   const { t, lang } = useLang();
 
@@ -46,12 +38,11 @@ function AppContent() {
     removeDemographics();
     removeRatings();
     removeTop3();
-    removeSavedStep();
+    setSavedStep(null);
     localStorage.removeItem(SESSION_KEYS.PREVIOUS_RESULT);
-    localStorage.removeItem('bot_verified');
     localStorage.removeItem('already_submitted');
     setStep(1);
-    setWantsRetake(true);
+    setWantsRetake(false);
   };
 
   const skipToMain = () => {
@@ -60,12 +51,6 @@ function AppContent() {
       main.focus();
       main.scrollIntoView();
     }
-  };
-
-  const handleBotVerified = () => {
-    setBotVerified(true);
-    localStorage.setItem('bot_verified', 'true');
-    setWantsRetake(false);
   };
 
   const handleDemographics = (data) => {
@@ -96,8 +81,8 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
 
-  const hasCompletedSurvey = previousResult && botVerified && !wantsRetake;
-  const hasSavedProgress = savedStep === 4 && botVerified && !wantsRetake && demographics && ratings && top3 && top3.length > 0;
+  const hasCompletedSurvey = previousResult && !wantsRetake;
+  const hasSavedProgress = savedStep === 4 && !wantsRetake && demographics && ratings && top3 && top3.length > 0;
 
   if (hasCompletedSurvey || hasSavedProgress) {
     const resultData = previousResult || { demographics, ratings, top3, startTime };
@@ -121,27 +106,6 @@ function AppContent() {
             onRetake={clearAllSession}
           />
         </main>
-      </div>
-    );
-  }
-
-  if (!botVerified || wantsRetake) {
-    return (
-      <div className="min-h-screen py-8 px-4 sm:px-6">
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
-          onClick={skipToMain}
-        >
-          {t('accessibility.skipToMain')}
-        </a>
-        <LanguageSwitcher />
-        <div className="max-w-md w-full mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
-            <span className="gradient-text">{t('app.title')}</span>
-          </h1>
-          <AntiBotCheck onVerified={handleBotVerified} />
-        </div>
       </div>
     );
   }
