@@ -30,35 +30,33 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
-      <div className="glass rounded-xl p-1 flex gap-1" role="group" aria-label={lang === 'pl' ? 'Wybierz język' : 'Select language'}>
-        <button
-          onClick={() => handleSwitch('pl')}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-            lang === 'pl'
-              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-          }`}
-          aria-label="Polski"
-          aria-pressed={lang === 'pl'}
-        >
-          <PLFlag />
-          <span className="hidden sm:inline">PL</span>
-        </button>
-        <button
-          onClick={() => handleSwitch('en')}
-          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
-            lang === 'en'
-              ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-          }`}
-          aria-label="English"
-          aria-pressed={lang === 'en'}
-        >
-          <GBFlag />
-          <span className="hidden sm:inline">EN</span>
-        </button>
-      </div>
+    <div className="glass rounded-xl p-1 flex gap-1" role="group" aria-label={lang === 'pl' ? 'Wybierz język' : 'Select language'}>
+      <button
+        onClick={() => handleSwitch('pl')}
+        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+          lang === 'pl'
+            ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+        }`}
+        aria-label="Polski"
+        aria-pressed={lang === 'pl'}
+      >
+        <PLFlag />
+        <span className="hidden sm:inline">PL</span>
+      </button>
+      <button
+        onClick={() => handleSwitch('en')}
+        className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
+          lang === 'en'
+            ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
+            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+        }`}
+        aria-label="English"
+        aria-pressed={lang === 'en'}
+      >
+        <GBFlag />
+        <span className="hidden sm:inline">EN</span>
+      </button>
     </div>
   );
 }

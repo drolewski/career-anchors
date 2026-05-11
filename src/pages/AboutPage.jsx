@@ -1,5 +1,5 @@
 import { useLang } from '../lib/i18n.jsx';
-import LanguageSwitcher from '../components/LanguageSwitcher.jsx';
+import Header from '../components/Header.jsx';
 
 export default function AboutPage() {
   const { t, lang } = useLang();
@@ -268,7 +268,7 @@ export default function AboutPage() {
       >
         {t('accessibility.skipToMain')}
       </a>
-      <LanguageSwitcher />
+      <Header />
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">

@@ -9,8 +9,11 @@ export const translations = {
       check: "Verify",
       wrongAnswer: "Wrong answer, please try again.",
     },
-    nav: {
+nav: {
       mainNav: "Main navigation",
+      survey: "Take Survey",
+      stats: "Statistics",
+      about: "About",
     },
     accessibility: {
       skipToMain: "Skip to main content",
@@ -330,6 +333,9 @@ export const translations = {
     },
     nav: {
       mainNav: "Nawigacja główna",
+      survey: "Wypełnij ankietę",
+      stats: "Statystyki",
+      about: "O Kotwicach",
     },
     accessibility: {
       skipToMain: "Przejdź do głównej treści",
