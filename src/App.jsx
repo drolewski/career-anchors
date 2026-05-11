@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { LanguageProvider } from './lib/i18n.jsx';
 import LanguageSwitcher from './components/LanguageSwitcher.jsx';
 import Header from './components/Header.jsx';
@@ -10,6 +11,8 @@ import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
 import StatsPage from './stats/StatsPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
+import PrivacyPage from './pages/PrivacyPage.jsx';
+import TermsPage from './pages/TermsPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
 import LanguageRedirect from './pages/LanguageRedirect.jsx';
 import { useLang } from './lib/i18n.jsx';
@@ -171,6 +174,23 @@ function AppContent() {
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
             </a>
           </p>
+          <p>
+            <a
+              href="/privacy"
+              target="_self"
+              className="text-slate-600 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {lang === 'pl' ? 'Polityka prywatności' : 'Privacy Policy'}
+            </a>
+            {' · '}
+            <a
+              href="/terms"
+              target="_self"
+              className="text-slate-600 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {lang === 'pl' ? 'Regulamin' : 'Terms of Service'}
+            </a>
+          </p>
         </footer>
       </main>
     </div>
@@ -179,20 +199,24 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <LanguageProvider>
-        <Routes>
-          <Route path="/en/*" element={<LanguageRedirect />} />
-          <Route path="/pl/*" element={<LanguageRedirect />} />
-          <Route path="/" element={<AppContent />} />
-          <Route path="/stats" element={<StatsPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <Analytics/>
-        <SpeedInsights/>
-      </LanguageProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <BrowserRouter>
+        <LanguageProvider>
+          <Routes>
+            <Route path="/en/*" element={<LanguageRedirect />} />
+            <Route path="/pl/*" element={<LanguageRedirect />} />
+            <Route path="/" element={<AppContent />} />
+            <Route path="/stats" element={<StatsPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/terms" element={<TermsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          <Analytics/>
+          <SpeedInsights/>
+        </LanguageProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 

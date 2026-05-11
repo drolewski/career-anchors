@@ -1,0 +1,43 @@
+{
+  "name": "Kotwice Kariery Scheina",
+  "short_name": "Kotwice Kariery",
+  "description": "Bezpłatny test kariery oparty na badaniach Edgara Scheina z MIT. Poznaj swoje 8 kotwic kariery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pl",
+  "dir": "ltr",
+  "categories": ["education", "business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Wypełnij ankietę",
+      "short_name": "Ankieta",
+      "description": "Rozpocznij test Kotwic Kariery",
+      "url": "/"
+    },
+    {
+      "name": "Statystyki",
+      "short_name": "Statystyki",
+      "description": "Zobacz anonimowe statystyki",
+      "url": "/stats"
+    }
+  ],
+  "prefer_related_applications": false
+}

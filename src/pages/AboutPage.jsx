@@ -1,5 +1,6 @@
 import { useLang } from '../lib/i18n.jsx';
 import Header from '../components/Header.jsx';
+import SeoMeta from '../components/SeoMeta.jsx';
 
 export default function AboutPage() {
   const { t, lang } = useLang();
@@ -260,17 +261,19 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4 sm:px-6">
-      <a
-        href="#about-main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
-        onClick={skipToMain}
-      >
-        {t('accessibility.skipToMain')}
-      </a>
-      <Header />
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-12">
+    <>
+      <SeoMeta />
+      <div className="min-h-screen py-8 px-4 sm:px-6">
+        <a
+          href="#about-main"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+          onClick={skipToMain}
+        >
+          {t('accessibility.skipToMain')}
+        </a>
+        <Header />
+        <div className="max-w-3xl mx-auto">
+          <header className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">
             <span className="gradient-text">{content.title}</span>
           </h1>
@@ -411,7 +414,7 @@ export default function AboutPage() {
           </section>
         </main>
 
-        <nav className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent pt-8 pb-4" aria-label={lang === 'pl' ? 'Działania na stronie' : 'Page actions'}>
+        <nav className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-slate-800 via-slate-800/95 to-transparent pt-8 pb-4" aria-label={lang === 'pl' ? 'Działania na stronie' : 'Page actions'}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/"
@@ -435,22 +438,49 @@ export default function AboutPage() {
             </a>
           </div>
         </nav>
-        <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2" role="contentinfo">
-          <p>{t('app.footer')}</p>
-          <p>
-            {t('app.created')}
-            <a
-                href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
-                aria-label={lang === 'pl' ? 'Dominik Rolewski – otwiera się w nowej karcie' : 'Dominik Rolewski – opens in new tab'}
-            >
-              Dominik Rolewski
-            </a>
-          </p>
-        </footer>
+          <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2">
+            <p>{t('app.footer')}</p>
+            <p>
+              {t('app.created')}
+              <a
+                  href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              >
+                Dominik Rolewski
+              </a>
+            </p>
+            <p>
+              <a
+                  href="/about"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              >
+                {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
+              </a>
+            </p>
+            <p>
+              <a
+                  href="/privacy"
+                  target="_self"
+                  className="text-slate-600 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              >
+                {lang === 'pl' ? 'Polityka prywatności' : 'Privacy Policy'}
+              </a>
+              {' · '}
+              <a
+                  href="/terms"
+                  target="_self"
+                  className="text-slate-600 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              >
+                {lang === 'pl' ? 'Regulamin' : 'Terms of Service'}
+              </a>
+            </p>
+          </footer>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
