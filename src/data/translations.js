@@ -256,6 +256,11 @@ export const translations = {
       showLess: "Show less",
       pair: "Pair",
       count: "Count",
+      top3Anchors: "Top 3 Anchors Distribution",
+      mostFrequent: "Most Frequent",
+      leastFrequent: "Least Frequent",
+      totalTop3: "Total Top 3 Selections",
+      top3Hint: "Number of times anchor appears in Top 3",
     },
   },
 
@@ -521,6 +526,11 @@ export const translations = {
       showLess: "Pokaż mniej",
       pair: "Para",
       count: "Liczba",
+      top3Anchors: "Rozkład kotwic w Top 3",
+      mostFrequent: "Najczęstsza",
+      leastFrequent: "Najrzadsza",
+      totalTop3: "Suma Top 3",
+      top3Hint: "Liczba wystąpień kotwicy w Top 3",
     },
   },
 };

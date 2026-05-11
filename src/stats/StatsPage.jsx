@@ -8,7 +8,8 @@ import GenerationStats from './GenerationStats.jsx';
 import AnchorPairs from './AnchorPairs.jsx';
 import IndustryStats from './IndustryStats.jsx';
 import StatsFilters from './StatsFilters.jsx';
-import { anchorOrder } from '../data/anchors.js';
+import Top3Anchors from './Top3Anchors.jsx';
+import { anchorOrder, getAnchorForSentence } from '../data/anchors.js';
 import { translations } from '../data/translations.js';
 import { normalizeResponse, normalizeFilters } from './normalizer.js';
 
@@ -90,12 +91,15 @@ export default function StatsPage() {
     const anchorPairs = {};
     const generationAnchors = {};
     const industryAnchors = {};
-
+    const top3Anchors = {};
     anchorOrder.forEach(code => {
       anchorCounts.primary[code] = 0;
       anchorCounts.secondary[code] = 0;
       anchorCounts.tertiary[code] = 0;
+      top3Anchors[code] = 0;
     });
+
+    let top3Total = 0;
 
     responses.forEach(r => {
       if (r.primary_anchor) {
@@ -106,6 +110,15 @@ export default function StatsPage() {
       }
       if (r.tertiary_anchor) {
         anchorCounts.tertiary[r.tertiary_anchor] = (anchorCounts.tertiary[r.tertiary_anchor] || 0) + 1;
+      }
+
+      if (r.top_3 && Array.isArray(r.top_3)) {
+        r.top_3.forEach(sentenceId => {
+          const anchor = getAnchorForSentence(sentenceId);
+          if (anchor) {
+            top3Anchors[anchor] = (top3Anchors[anchor] || 0) + 1;
+          }
+        });
       }
 
       if (r.primary_anchor && r.secondary_anchor) {
@@ -136,6 +149,8 @@ export default function StatsPage() {
       }
     });
 
+    top3Total = Object.values(top3Anchors).reduce((sum, v) => sum + v, 0);
+
     return {
       total,
       weeklyData,
@@ -143,6 +158,8 @@ export default function StatsPage() {
       anchorPairs,
       generationAnchors,
       industryAnchors,
+      top3Anchors,
+      top3Total,
     };
   };
 
@@ -250,12 +267,29 @@ export default function StatsPage() {
 
             <GenerationStats data={data?.generationAnchors || {}} />
 
+            <Top3Anchors data={data?.top3Anchors || {}} total={data?.top3Total || 0} />
+
             <IndustryStats data={data?.industryAnchors || {}} />
 
             <WeeklyResponses data={data?.weeklyData || []} />
           </>
         )}
       </div>
+
+      <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-1">
+        <p>{t('app.footer')}</p>
+        <p>
+          {t('app.created')}
+          <a
+            href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+          >
+            Dominik Rolewski
+          </a>
+        </p>
+      </footer>
     </div>
   );
 }

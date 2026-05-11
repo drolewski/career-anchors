@@ -86,7 +86,7 @@ export default function AnchorDistribution({ title, data, total, colors }) {
             </Pie>
             <Tooltip content={<CustomTooltip />} />
             <Legend
-              wrapperStyle={{ fontSize: '10px', lineHeight: '16px' }}
+              wrapperStyle={{ fontSize: '13px', lineHeight: '20px' }}
               formatter={(value) => <span style={{ color: '#94A3B8' }}>{value}</span>}
             />
           </PieChart>
