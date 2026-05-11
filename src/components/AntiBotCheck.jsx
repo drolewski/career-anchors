@@ -19,11 +19,13 @@ export default function AntiBotCheck({ onVerified }) {
   };
 
   return (
-    <div className="glass rounded-xl p-4 mb-4">
-      <p className="text-sm text-slate-400 mb-2">{t('app.verification')}</p>
+    <div className="glass rounded-xl p-4 mb-4" role="region" aria-label={t('app.verification')}>
+      <p className="text-sm text-slate-400 mb-2" id="antobot-label">{t('app.verification')}</p>
       <div className="flex items-center gap-2">
-        <span className="text-slate-200 font-medium">{num1} + {num2} = </span>
+        <span className="text-slate-200 font-medium" aria-hidden="true">{num1} + {num2} = </span>
+        <label htmlFor="antobot-answer" className="sr-only">{t('app.verification')}</label>
         <input
+          id="antobot-answer"
           type="number"
           value={answer}
           onChange={(e) => setAnswer(e.target.value)}
@@ -32,15 +34,22 @@ export default function AntiBotCheck({ onVerified }) {
             error ? 'border-red-500 focus:ring-red-500' : 'border-slate-700 focus:border-indigo-500'
           }`}
           placeholder="?"
+          aria-describedby="antobot-error"
+          aria-invalid={error}
         />
         <button
           onClick={checkAnswer}
           className="px-3 py-2 bg-slate-700 text-slate-300 rounded-lg text-sm hover:bg-slate-600 transition-colors"
+          aria-describedby="antobot-error"
         >
           {t('app.check')}
         </button>
       </div>
-      {error && <p className="text-red-400 text-xs mt-2">{t('app.wrongAnswer')}</p>}
+      {error && (
+        <p id="antobot-error" className="text-red-400 text-xs mt-2" role="alert" aria-live="assertive">
+          {t('app.wrongAnswer')}
+        </p>
+      )}
     </div>
   );
 }

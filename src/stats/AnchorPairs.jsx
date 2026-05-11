@@ -77,25 +77,31 @@ export default function AnchorPairs({ data, total }) {
         {t('stats.anchorPairs')}
       </h2>
       <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
-        <table className="w-full">
+        <table className="w-full" aria-label={t('stats.anchorPairs')}>
           <thead>
             <tr className="border-b border-slate-700">
-              <th className="text-left py-3 px-2 text-xs sm:text-sm font-medium text-slate-400">#</th>
+              <th scope="col" className="text-left py-3 px-2 text-xs sm:text-sm font-medium text-slate-400">#</th>
               <th
+                scope="col"
                 className="text-left py-3 px-2 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('pair')}
+                aria-sort={sortConfig.key === 'pair' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
                 {t('stats.pair')} <SortIcon column="pair" />
               </th>
               <th
+                scope="col"
                 className="text-right py-3 px-2 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('count')}
+                aria-sort={sortConfig.key === 'count' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
                 {t('stats.count')} <SortIcon column="count" />
               </th>
               <th
+                scope="col"
                 className="text-right py-3 pl-2 pr-4 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('percentage')}
+                aria-sort={sortConfig.key === 'percentage' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
                 % <SortIcon column="percentage" />
               </th>
@@ -114,14 +120,16 @@ export default function AnchorPairs({ data, total }) {
                         <span
                           className="inline-block w-2 h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: anchorColors[a1] }}
+                          aria-hidden="true"
                         />
                         <span className="text-xs sm:text-sm text-slate-200 whitespace-nowrap">{t(`anchors.${a1}.name`)}</span>
                       </div>
-                      <span className="text-slate-600 text-xs">+</span>
+                      <span className="text-slate-600 text-xs" aria-hidden="true">+</span>
                       <div className="flex items-center gap-1">
                         <span
                           className="inline-block w-2 h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: anchorColors[a2] }}
+                          aria-hidden="true"
                         />
                         <span className="text-xs sm:text-sm text-slate-200 whitespace-nowrap">{t(`anchors.${a2}.name`)}</span>
                       </div>
@@ -139,6 +147,7 @@ export default function AnchorPairs({ data, total }) {
         <button
           onClick={() => setShowAll(!showAll)}
           className="mt-4 text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+          aria-expanded={showAll}
         >
           {showAll ? t('stats.showLess') : t('stats.showAll')}
         </button>

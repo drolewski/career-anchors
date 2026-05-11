@@ -251,174 +251,191 @@ export default function AboutPage() {
     }
   };
 
+  const skipToMain = () => {
+    const main = document.getElementById('about-main');
+    if (main) {
+      main.focus();
+      main.scrollIntoView();
+    }
+  };
+
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6">
+      <a
+        href="#about-main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+        onClick={skipToMain}
+      >
+        {t('accessibility.skipToMain')}
+      </a>
       <LanguageSwitcher />
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">
             <span className="gradient-text">{content.title}</span>
           </h1>
           <p className="text-slate-400 text-base sm:text-lg">{content.subtitle}</p>
-        </div>
+        </header>
 
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-slate-200 mb-4">{content.whatIs.title}</h2>
-          <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
-            <p className="text-slate-300 leading-relaxed">{content.whatIs.p1}</p>
-            <p className="text-slate-300 leading-relaxed">{content.whatIs.p2}</p>
-            <p className="text-slate-300 leading-relaxed">{content.whatIs.p3}</p>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-slate-200 mb-4">{content.anchors.title}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {content.anchors.items.map((anchor, idx) => (
-              <div key={idx} className="glass rounded-xl p-5">
-                <h3 className="font-semibold text-indigo-400 mb-2">{anchor.name}</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">{anchor.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-slate-200 mb-4">{content.benefits.title}</h2>
-          
-          <div className="space-y-6">
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-cyan-400 mb-3">{content.benefits.individual.title}</h3>
-              <ul className="space-y-2">
-                {content.benefits.individual.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <svg className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+        <main id="about-main" tabIndex={-1} className="focus:outline-none">
+          <section className="mb-12" aria-labelledby="whatis-title">
+            <h2 id="whatis-title" className="text-xl font-semibold text-slate-200 mb-4">{content.whatIs.title}</h2>
+            <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
+              <p className="text-slate-300 leading-relaxed">{content.whatIs.p1}</p>
+              <p className="text-slate-300 leading-relaxed">{content.whatIs.p2}</p>
+              <p className="text-slate-300 leading-relaxed">{content.whatIs.p3}</p>
             </div>
+          </section>
 
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-emerald-400 mb-3">{content.benefits.team.title}</h3>
-              <ul className="space-y-2">
-                {content.benefits.team.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <svg className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
+          <section className="mb-12" aria-labelledby="anchors-title">
+            <h2 id="anchors-title" className="text-xl font-semibold text-slate-200 mb-4">{content.anchors.title}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {content.anchors.items.map((anchor, idx) => (
+                <article key={idx} className="glass rounded-xl p-5">
+                  <h3 className="font-semibold text-indigo-400 mb-2">{anchor.name}</h3>
+                  <p className="text-slate-400 text-sm leading-relaxed">{anchor.desc}</p>
+                </article>
+              ))}
             </div>
+          </section>
 
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-amber-400 mb-3">{content.benefits.company.title}</h3>
-              <ul className="space-y-2">
-                {content.benefits.company.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <svg className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-slate-200 mb-4">{content.howToUse.title}</h2>
-          
-          <div className="space-y-6">
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-indigo-400 mb-3">{content.howToUse.employee.title}</h3>
-              <ul className="space-y-2">
-                {content.howToUse.employee.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <span className="text-indigo-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-rose-400 mb-3">{content.howToUse.manager.title}</h3>
-              <ul className="space-y-2">
-                {content.howToUse.manager.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <span className="text-rose-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="glass rounded-2xl p-6">
-              <h3 className="font-semibold text-violet-400 mb-3">{content.howToUse.director.title}</h3>
-              <ul className="space-y-2">
-                {content.howToUse.director.items.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
-                    <span className="text-violet-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-xl font-semibold text-slate-200 mb-4">{content.workshops.title}</h2>
-          
-          <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
-            <p className="text-slate-300 leading-relaxed text-sm">{content.workshops.intro}</p>
+          <section className="mb-12" aria-labelledby="benefits-title">
+            <h2 id="benefits-title" className="text-xl font-semibold text-slate-200 mb-4">{content.benefits.title}</h2>
             
-            <p className="text-slate-400 text-sm">
-              {content.workshops.contact}
-              <a
-                href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
-              >
-                {content.workshops.contactLink}
-              </a>
-            </p>
-          </div>
-        </section>
+            <div className="space-y-6">
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-cyan-400 mb-3">{content.benefits.individual.title}</h3>
+                <ul className="space-y-2">
+                  {content.benefits.individual.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <svg className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-        <section className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent pt-8 pb-4">
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-emerald-400 mb-3">{content.benefits.team.title}</h3>
+                <ul className="space-y-2">
+                  {content.benefits.team.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <svg className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-amber-400 mb-3">{content.benefits.company.title}</h3>
+                <ul className="space-y-2">
+                  {content.benefits.company.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <svg className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-12" aria-labelledby="howtouse-title">
+            <h2 id="howtouse-title" className="text-xl font-semibold text-slate-200 mb-4">{content.howToUse.title}</h2>
+            
+            <div className="space-y-6">
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-indigo-400 mb-3">{content.howToUse.employee.title}</h3>
+                <ol className="space-y-2" start="1">
+                  {content.howToUse.employee.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <span className="text-indigo-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
+                      {item}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-rose-400 mb-3">{content.howToUse.manager.title}</h3>
+                <ol className="space-y-2" start="1">
+                  {content.howToUse.manager.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <span className="text-rose-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
+                      {item}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              <div className="glass rounded-2xl p-6">
+                <h3 className="font-semibold text-violet-400 mb-3">{content.howToUse.director.title}</h3>
+                <ol className="space-y-2" start="1">
+                  {content.howToUse.director.items.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-slate-300 text-sm">
+                      <span className="text-violet-400 font-semibold min-w-[1.5rem]">{idx + 1}.</span>
+                      {item}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </section>
+
+          <section className="mb-12" aria-labelledby="workshops-title">
+            <h2 id="workshops-title" className="text-xl font-semibold text-slate-200 mb-4">{content.workshops.title}</h2>
+            
+            <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
+              <p className="text-slate-300 leading-relaxed text-sm">{content.workshops.intro}</p>
+              
+              <p className="text-slate-400 text-sm">
+                {content.workshops.contact}
+                <a
+                  href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
+                  aria-label={lang === 'pl' ? 'Napisz do mnie – otwiera się w nowej karcie' : 'Write to me – opens in new tab'}
+                >
+                  {content.workshops.contactLink}
+                </a>
+              </p>
+            </div>
+          </section>
+        </main>
+
+        <nav className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent pt-8 pb-4" aria-label={lang === 'pl' ? 'Działania na stronie' : 'Page actions'}>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href="/"
-              target="_blank"
+              target="_self"
               className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-indigo-500/25"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
               {content.cta.takeTest}
             </a>
             <a
               href="/stats"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_self"
               className="inline-flex items-center justify-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 border border-slate-600 text-slate-300 hover:border-indigo-500 hover:text-indigo-400"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v2m-6 0a2 2 0 012 2v2m-6 0h6" />
               </svg>
               {content.cta.stats}
             </a>
           </div>
-        </section>
-        <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2">
+        </nav>
+        <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2" role="contentinfo">
           <p>{t('app.footer')}</p>
           <p>
             {t('app.created')}
@@ -427,18 +444,9 @@ export default function AboutPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+                aria-label={lang === 'pl' ? 'Dominik Rolewski – otwiera się w nowej karcie' : 'Dominik Rolewski – opens in new tab'}
             >
               Dominik Rolewski
-            </a>
-          </p>
-          <p>
-            <a
-                href="/about"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
-            >
-              {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
             </a>
           </p>
         </footer>

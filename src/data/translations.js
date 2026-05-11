@@ -9,16 +9,27 @@ export const translations = {
       check: "Verify",
       wrongAnswer: "Wrong answer, please try again.",
     },
+    nav: {
+      mainNav: "Main navigation",
+    },
+    accessibility: {
+      skipToMain: "Skip to main content",
+    },
     steps: {
       aboutYou: "About You",
       rateSentences: "Rate Sentences",
       top3: "Top 3",
       results: "Results",
+      progress: "Survey progress",
+      currentStep: "Current step",
+      completed: "Completed",
     },
     demographics: {
       personalInfo: "Personal Information",
+      formTitle: "Survey demographics form",
       yearOfBirth: "Year of Birth *",
       yearPlaceholder: "Select year...",
+      yearHint: "Your birth year determines your generation group",
       generation: "Generation",
       currentPosition: "Current Position *",
       selectPosition: "Select position...",
@@ -30,6 +41,7 @@ export const translations = {
       optional: "(optional)",
       freeTextPlaceholder: "What matters most to you in your career? Any additional context you'd like to share...",
       startTest: "Start the Test",
+      requiredHint: "Please fill in all required fields to continue",
     },
     positions: [
       "Junior Specialist", "Specialist", "Senior Specialist", "Team Lead",
@@ -80,6 +92,8 @@ export const translations = {
       ratedOf40: "{count}/40 sentences rated",
       notAtAll: "Not at all",
       completely: "Completely",
+      rateAs: "Rate as",
+      progressAria: "Progress",
       labels: {
         1: "Not at all",
         2: "Slightly",
@@ -249,6 +263,7 @@ export const translations = {
       industryHint: "Showing industries with at least 3 responses",
       filters: "Smart Filters",
       clearFilters: "Clear all",
+      activeFilters: "active filters",
       generation: "Generation",
       industry: "Industry",
       position: "Position",
@@ -272,18 +287,29 @@ export const translations = {
       created: "Stworzony przez ",
       verification: "Weryfikacja: ",
       check: "Sprawdź",
-      wrongAnswer: "Błędna odpowiedź, spróbuj ponownie."
+      wrongAnswer: "Błędna odpowiedź, spróbuj ponownie.",
+    },
+    nav: {
+      mainNav: "Nawigacja główna",
+    },
+    accessibility: {
+      skipToMain: "Przejdź do głównej treści",
     },
     steps: {
       aboutYou: "O Tobie",
       rateSentences: "Ocena zdań",
       top3: "Top 3",
       results: "Wyniki",
+      progress: "Postęp ankiety",
+      currentStep: "Aktualny krok",
+      completed: "Ukończone",
     },
     demographics: {
       personalInfo: "Informacje osobiste",
+      formTitle: "Formularz danych demograficznych ankiety",
       yearOfBirth: "Rok urodzenia *",
       yearPlaceholder: "Wybierz rok...",
+      yearHint: "Rok urodzenia determinuje grupę pokoleniową",
       generation: "Pokolenie",
       currentPosition: "Aktualne stanowisko *",
       selectPosition: "Wybierz stanowisko...",
@@ -295,6 +321,7 @@ export const translations = {
       optional: "(opcjonalne)",
       freeTextPlaceholder: "Co jest dla Ciebie najważniejsze w karierze? Jakiekolwiek dodatkowe informacje, którymi chcesz się podzielić...",
       startTest: "Rozpocznij test",
+      requiredHint: "Wypełnij wszystkie wymagane pola, aby kontynuować",
     },
     positions: [
       "Młodszy/a specjalista/ka", "Specjalista/ka", "Starszy/a specjalista/ka", "Lider/ka zespołu",
@@ -350,6 +377,8 @@ export const translations = {
       ratedOf40: "{count}/40 ocenionych zdań",
       notAtAll: "Wcale",
       completely: "Całkowicie",
+      rateAs: "Oceń jako",
+      progressAria: "Postęp",
       labels: {
         1: "Wcale",
         2: "Trochę",
@@ -519,6 +548,7 @@ export const translations = {
       industryHint: "Pokazywanie branż z min. 3 odpowiedziami",
       filters: "Inteligentne filtry",
       clearFilters: "Wyczyść wszystko",
+      activeFilters: "aktywnych filtrów",
       generation: "Pokolenie",
       industry: "Branża",
       position: "Stanowisko",

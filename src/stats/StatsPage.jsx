@@ -214,35 +214,50 @@ export default function StatsPage() {
     );
   }
 
+  const skipToMain = () => {
+    const main = document.getElementById('stats-main');
+    if (main) {
+      main.focus();
+      main.scrollIntoView();
+    }
+  };
+
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6">
+      <a
+        href="#stats-main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+        onClick={skipToMain}
+      >
+        {t('accessibility.skipToMain')}
+      </a>
       <Header />
       <div className="max-w-7xl mx-auto space-y-8">
-        <div className="text-center mb-12">
+        <header className="text-center mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-4">
             <span className="gradient-text">{t('stats.title')}</span>
           </h1>
-          <p className="text-slate-400">
+          <p className="text-slate-400" role="status" aria-live="polite">
             {loading ? t('stats.loading') : `${t('stats.total')}: ${data?.total || 0}`}
           </p>
           <p className="text-xs text-slate-500 mt-3">
             <a
               href="/about"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_self"
               className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
             >
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
             </a>
           </p>
-        </div>
+        </header>
 
-        <StatsFilters filters={filters} onChange={setFilters} />
+        <main id="stats-main" tabIndex={-1} className="focus:outline-none">
+          <StatsFilters filters={filters} onChange={setFilters} />
 
         {loading ? (
-          <div className="glass rounded-xl p-12 text-center">
+          <div className="glass rounded-xl p-12 text-center" role="status" aria-live="polite">
             <div className="animate-pulse flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" role="img" aria-label={t('stats.loading')} />
               <p className="text-slate-400">{t('stats.loading')}</p>
             </div>
           </div>
@@ -284,9 +299,10 @@ export default function StatsPage() {
             <WeeklyResponses data={data?.weeklyData || []} />
           </>
         )}
+        </main>
       </div>
 
-      <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2">
+      <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2" role="contentinfo">
           <p>{t('app.footer')}</p>
           <p>
             {t('app.created')}
@@ -295,6 +311,7 @@ export default function StatsPage() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              aria-label={lang === 'pl' ? 'Dominik Rolewski – otwiera się w nowej karcie' : 'Dominik Rolewski – opens in new tab'}
             >
               Dominik Rolewski
             </a>
@@ -302,8 +319,7 @@ export default function StatsPage() {
           <p>
             <a
               href="/about"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_self"
               className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
             >
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}

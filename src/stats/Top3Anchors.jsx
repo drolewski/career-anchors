@@ -139,13 +139,14 @@ export default function Top3Anchors({ data, total }) {
         {t('stats.top3Anchors')}
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6" role="group" aria-label={t('stats.top3Anchors')}>
         <div className="bg-slate-800/50 rounded-lg p-4 border border-emerald-500/30">
-          <p className="text-xs text-slate-400 mb-1">{t('stats.mostFrequent')}</p>
-          <div className="flex items-center gap-2">
+          <p className="text-xs text-slate-400 mb-1" id="most-frequent-label">{t('stats.mostFrequent')}</p>
+          <div className="flex items-center gap-2" role="status" aria-labelledby="most-frequent-label">
             <span
               className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: anchorColors[mostFrequent.code] }}
+              aria-hidden="true"
             />
             <p className="text-sm font-medium text-emerald-400 truncate">{mostFrequent.name}</p>
           </div>
@@ -156,16 +157,17 @@ export default function Top3Anchors({ data, total }) {
 
         <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/30">
           <p className="text-xs text-slate-400 mb-1">{t('stats.totalTop3')}</p>
-          <p className="text-2xl font-bold text-slate-100">{total}</p>
+          <p className="text-2xl font-bold text-slate-100" role="status" aria-live="polite">{total}</p>
           <p className="text-xs text-slate-500">{t('stats.top3Hint')}</p>
         </div>
 
         <div className="bg-slate-800/50 rounded-lg p-4 border border-red-500/30">
-          <p className="text-xs text-slate-400 mb-1">{t('stats.leastFrequent')}</p>
-          <div className="flex items-center gap-2">
+          <p className="text-xs text-slate-400 mb-1" id="least-frequent-label">{t('stats.leastFrequent')}</p>
+          <div className="flex items-center gap-2" role="status" aria-labelledby="least-frequent-label">
             <span
               className="w-3 h-3 rounded-full flex-shrink-0"
               style={{ backgroundColor: anchorColors[leastFrequent.code] }}
+              aria-hidden="true"
             />
             <p className="text-sm font-medium text-red-400 truncate">{leastFrequent.name}</p>
           </div>
@@ -175,11 +177,15 @@ export default function Top3Anchors({ data, total }) {
         </div>
       </div>
 
-      <div className="h-64 sm:h-72">
-        <ResponsiveContainer width="100%" height="100%">
-          {chartContent}
-        </ResponsiveContainer>
-      </div>
+      <figure>
+        <span className="sr-only">{chartData.map(item => `${item.name}: ${item.count} (${item.percentage.toFixed(1)}%)`).join(', ')}</span>
+        <div className="h-64 sm:h-72">
+          <ResponsiveContainer width="100%" height="100%">
+            {chartContent}
+          </ResponsiveContainer>
+        </div>
+        <figcaption className="sr-only">{t('stats.top3Anchors')}: {chartData.map(item => `${item.name}: ${item.count}`).join(', ')}</figcaption>
+      </figure>
     </div>
   );
 }

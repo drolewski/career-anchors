@@ -115,53 +115,61 @@ export default function IndustryStats({ data }) {
     return null;
   };
 
+  const chartDescription = chartData.map(ind => 
+    `${ind.name}: ${ind.total > 0 ? Object.entries(ind)
+      .filter(([k]) => anchorOrder.includes(k))
+      .map(([k, v]) => `${t(`anchors.${k}.name`)} ${v}%`)
+      .join(', ') : 'No data'}`).join('. ');
+
   return (
     <div className="glass rounded-xl p-4 sm:p-6">
       <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
         {t('stats.anchorsByIndustry')}
         <span className="text-slate-400 text-base ml-2">({totalResponses})</span>
       </h2>
-      <div className="h-64 sm:h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            {isMobile ? (
-              <YAxis
-                type="category"
-                dataKey="name"
-                tick={{ fill: '#94A3B8', fontSize: 8 }}
-                tickLine={{ stroke: '#334155' }}
-                axisLine={{ stroke: '#334155' }}
-                width={45}
-                tickFormatter={(val) => val.length > 7 ? val.substring(0, 7) + '…' : val}
-              />
-            ) : (
-              <XAxis
-                dataKey="name"
-                tick={{ fill: '#94A3B8', fontSize: 10 }}
-                tickLine={{ stroke: '#334155' }}
-                axisLine={{ stroke: '#334155' }}
-                interval={0}
-                tickFormatter={(val) => val.length > 12 ? val.substring(0, 12) + '…' : val}
-              />
-            )}
-            {isMobile ? (
-              <XAxis
-                type="number"
-                tick={{ fill: '#94A3B8', fontSize: 10 }}
-                tickLine={{ stroke: '#334155' }}
-                axisLine={{ stroke: '#334155' }}
-                domain={[0, 100]}
-                tickFormatter={(v) => `${v}%`}
-              />
-            ) : (
-              <YAxis
-                tick={{ fill: '#94A3B8', fontSize: 11 }}
-                tickLine={{ stroke: '#334155' }}
-                axisLine={{ stroke: '#334155' }}
-                domain={[0, 100]}
-                tickFormatter={(v) => `${v}%`}
-                width={40}
+      <figure>
+        <span className="sr-only">{chartDescription}</span>
+        <div className="h-64 sm:h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'} role="img" aria-label={t('stats.anchorsByIndustry') + ': ' + chartDescription}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              {isMobile ? (
+                <YAxis
+                  type="category"
+                  dataKey="name"
+                  tick={{ fill: '#94A3B8', fontSize: 8 }}
+                  tickLine={{ stroke: '#334155' }}
+                  axisLine={{ stroke: '#334155' }}
+                  width={45}
+                  tickFormatter={(val) => val.length > 7 ? val.substring(0, 7) + '…' : val}
+                />
+              ) : (
+                <XAxis
+                  dataKey="name"
+                  tick={{ fill: '#94A3B8', fontSize: 10 }}
+                  tickLine={{ stroke: '#334155' }}
+                  axisLine={{ stroke: '#334155' }}
+                  interval={0}
+                  tickFormatter={(val) => val.length > 12 ? val.substring(0, 12) + '…' : val}
+                />
+              )}
+              {isMobile ? (
+                <XAxis
+                  type="number"
+                  tick={{ fill: '#94A3B8', fontSize: 10 }}
+                  tickLine={{ stroke: '#334155' }}
+                  axisLine={{ stroke: '#334155' }}
+                  domain={[0, 100]}
+                  tickFormatter={(v) => `${v}%`}
+                />
+              ) : (
+                <YAxis
+                  tick={{ fill: '#94A3B8', fontSize: 11 }}
+                  tickLine={{ stroke: '#334155' }}
+                  axisLine={{ stroke: '#334155' }}
+                  domain={[0, 100]}
+                  tickFormatter={(v) => `${v}%`}
+                  width={40}
               />
             )}
             <Tooltip content={<CustomTooltip />} />
@@ -176,7 +184,11 @@ export default function IndustryStats({ data }) {
             ))}
           </BarChart>
         </ResponsiveContainer>
-      </div>
+        </div>
+        <figcaption className="mt-4 text-xs text-slate-500 text-center">
+          {t('stats.industryHint')}
+        </figcaption>
+      </figure>
     </div>
   );
 }

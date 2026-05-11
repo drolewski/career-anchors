@@ -46,13 +46,14 @@ export default function Top3Step({ ratings, onNext }) {
       </div>
 
       <div className="glass rounded-2xl p-4 mb-6 flex items-center justify-between">
-        <span className="text-sm text-slate-400">
+        <span className="text-sm text-slate-400" id="top3-selection-count">
           {t('top3.selected')}: <span className="font-bold text-slate-200">{selected.length}/3</span>
         </span>
         {selected.length > 0 && (
           <button
             onClick={() => setSelected([])}
             className="text-xs text-red-400 hover:text-red-300 transition-colors"
+            aria-label={t('top3.clearAll')}
           >
             {t('top3.clearAll')}
           </button>
@@ -91,13 +92,15 @@ export default function Top3Step({ ratings, onNext }) {
                   ? `${anchorColors[anchorCode]} ring-2 ring-amber-500/50 shadow-lg shadow-amber-500/10`
                   : `${anchorColors[anchorCode]} glass-hover opacity-${selected.length >= 3 && !isSelected ? '40' : '100'}`
               }`}
+              aria-pressed={isSelected}
+              aria-label={`${translatedText}, ${t('top3.rated')}: ${rating}/6${isSelected ? ', ' + t('top3.selected') : ''}`}
             >
               <div className="flex items-start gap-4">
                 <div className={`flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold transition-all ${
                   isSelected
                     ? 'bg-amber-500 text-white'
                     : 'bg-slate-800 text-slate-500 border border-slate-700'
-                }`}>
+                }`} aria-hidden="true">
                   {isSelected ? (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />

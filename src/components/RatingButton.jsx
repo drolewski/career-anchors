@@ -12,10 +12,11 @@ export default function RatingButton({ value, selected, onClick }) {
           ? 'selected border-transparent'
           : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-indigo-500/50 hover:text-slate-200'
       }`}
-      title={labels?.[value] || value}
+      aria-label={`${t('rating.rateAs')} ${labels?.[value] || value}`}
+      aria-pressed={selected}
     >
-      <span>{value}</span>
-      <span className="text-[9px] font-normal leading-tight opacity-70 hidden sm:block">
+      <span aria-hidden="true">{value}</span>
+      <span className="text-[9px] font-normal leading-tight opacity-70 hidden sm:block" aria-hidden="true">
         {labels?.[value] || value}
       </span>
     </button>

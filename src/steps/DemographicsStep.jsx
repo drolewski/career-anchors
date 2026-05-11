@@ -55,10 +55,10 @@ export default function DemographicsStep({ data, onNext }) {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" aria-label={t('demographics.formTitle')}>
         <div className="glass rounded-2xl p-6 sm:p-8">
           <h2 className="text-lg font-semibold text-slate-200 mb-6 flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm">
+            <span className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm" aria-hidden="true">
               1
             </span>
             {t('demographics.personalInfo')}
@@ -66,13 +66,16 @@ export default function DemographicsStep({ data, onNext }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label htmlFor="birthYear" className="block text-sm font-medium text-slate-400 mb-2">
                 {t('demographics.yearOfBirth')}
               </label>
               <select
+                id="birthYear"
                 value={form.birthYear}
                 onChange={(e) => setForm({ ...form, birthYear: e.target.value })}
                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                aria-required="true"
+                aria-describedby="birthYear-hint"
               >
                 <option value="">{t('demographics.yearPlaceholder')}</option>
                 {Array.from({ length: 2012 - 1946 + 1 }, (_, i) => 2012 - i).map(year => (
@@ -84,23 +87,28 @@ export default function DemographicsStep({ data, onNext }) {
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-xs text-cyan-400 mt-1.5 flex items-center gap-1"
+                  role="status"
+                  aria-live="polite"
                 >
-                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {t('demographics.generation')}: {generation}
                 </motion.p>
               )}
+              <span id="birthYear-hint" className="sr-only">{t('demographics.yearHint')}</span>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label htmlFor="position" className="block text-sm font-medium text-slate-400 mb-2">
                 {t('demographics.currentPosition')}
               </label>
               <select
+                id="position"
                 value={form.position}
                 onChange={(e) => setForm({ ...form, position: e.target.value })}
                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                aria-required="true"
               >
                 <option value="">{t('demographics.selectPosition')}</option>
                 {(Array.isArray(positions) ? positions : []).map(p => (
@@ -110,13 +118,15 @@ export default function DemographicsStep({ data, onNext }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label htmlFor="branch" className="block text-sm font-medium text-slate-400 mb-2">
                 {t('demographics.branchDept')}
               </label>
               <select
+                id="branch"
                 value={form.branch}
                 onChange={(e) => setForm({ ...form, branch: e.target.value })}
                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                aria-required="true"
               >
                 <option value="">{t('demographics.selectBranch')}</option>
                 {(Array.isArray(branches) ? branches : []).map(b => (
@@ -126,13 +136,15 @@ export default function DemographicsStep({ data, onNext }) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-2">
+              <label htmlFor="industry" className="block text-sm font-medium text-slate-400 mb-2">
                 {t('demographics.industry')}
               </label>
               <select
+                id="industry"
                 value={form.industry}
                 onChange={(e) => setForm({ ...form, industry: e.target.value })}
                 className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all appearance-none"
+                aria-required="true"
               >
                 <option value="">{t('demographics.selectIndustry')}</option>
                 {(Array.isArray(industries) ? industries : []).map(ind => (
@@ -145,13 +157,15 @@ export default function DemographicsStep({ data, onNext }) {
 
         <div className="glass rounded-2xl p-6 sm:p-8">
           <h2 className="text-lg font-semibold text-slate-200 mb-4 flex items-center gap-2">
-            <span className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-sm">
+            <span className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center text-cyan-400 text-sm" aria-hidden="true">
               2
             </span>
             {t('demographics.additionalThoughts')}
             <span className="text-xs text-slate-500 font-normal">{t('demographics.optional')}</span>
           </h2>
+          <label htmlFor="freeText" className="sr-only">{t('demographics.additionalThoughts')}</label>
           <textarea
+            id="freeText"
             value={form.freeText}
             onChange={(e) => {
               if (e.target.value.length <= 300) {
@@ -160,8 +174,10 @@ export default function DemographicsStep({ data, onNext }) {
             }}
             placeholder={t('demographics.freeTextPlaceholder')}
             className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 text-slate-200 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all resize-none h-28"
+            aria-describedby="freeText-counter"
+            maxLength={300}
           />
-          <p className="text-xs text-slate-500 mt-1.5 text-right">
+          <p id="freeText-counter" className="text-xs text-slate-500 mt-1.5 text-right" aria-live="polite">
             {form.freeText.length}/300
           </p>
         </div>
@@ -170,12 +186,16 @@ export default function DemographicsStep({ data, onNext }) {
           type="submit"
           disabled={!isValid}
           className="w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-indigo-500/25 hover:-translate-y-0.5 active:translate-y-0"
+          aria-describedby={isValid ? undefined : 'form-required-hint'}
         >
           {t('demographics.startTest')}
-          <svg className="inline-block w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="inline-block w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
         </button>
+        {!isValid && (
+          <p id="form-required-hint" className="sr-only">{t('demographics.requiredHint')}</p>
+        )}
       </form>
     </motion.div>
   );

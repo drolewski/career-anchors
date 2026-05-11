@@ -108,45 +108,54 @@ export default function GenerationStats({ data }) {
     return null;
   };
 
+  const chartDescription = chartData.map(gen => 
+    `${gen.name}: ${totalResponses > 0 ? Object.entries(gen)
+      .filter(([k]) => anchorOrder.includes(k))
+      .map(([k, v]) => `${t(`anchors.${k}.name`)} ${v}%`)
+      .join(', ') : 'No data'}`).join('. ');
+
   return (
     <div className="glass rounded-xl p-4 sm:p-6">
       <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
         {t('stats.anchorsByGeneration')}
         <span className="text-slate-400 text-base ml-2">({totalResponses})</span>
       </h2>
-      <div className="h-64 sm:h-80">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              dataKey="name"
-              tick={{ fill: '#94A3B8', fontSize: 11 }}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              interval={0}
-            />
-            <YAxis
-              tick={{ fill: '#94A3B8', fontSize: 11 }}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              domain={[0, 100]}
-              tickFormatter={(v) => `${v}%`}
-              width={40}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
-              formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
-            />
-            {anchorOrder.map(code => (
-              <Bar key={code} dataKey={code} fill={anchorColors[code]} stackId="stack" />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="mt-4 text-xs text-slate-500 text-center">
-        {t('stats.generationHint')}
-      </div>
+      <figure>
+        <span className="sr-only">{chartDescription}</span>
+        <div className="h-64 sm:h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }} role="img" aria-label={t('stats.anchorsByGeneration') + ': ' + chartDescription}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis
+                dataKey="name"
+                tick={{ fill: '#94A3B8', fontSize: 11 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                interval={0}
+              />
+              <YAxis
+                tick={{ fill: '#94A3B8', fontSize: 11 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                domain={[0, 100]}
+                tickFormatter={(v) => `${v}%`}
+                width={40}
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend
+                wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
+                formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
+              />
+              {anchorOrder.map(code => (
+                <Bar key={code} dataKey={code} fill={anchorColors[code]} stackId="stack" />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <figcaption className="mt-4 text-xs text-slate-500 text-center">
+          {t('stats.generationHint')}
+        </figcaption>
+      </figure>
     </div>
   );
 }

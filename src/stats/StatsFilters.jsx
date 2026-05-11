@@ -80,19 +80,23 @@ export default function StatsFilters({ filters, onChange }) {
     filters.dateFrom ||
     filters.dateTo;
 
+  const filterPanelId = 'stats-filter-panel';
+
   return (
     <div className="glass rounded-xl">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="w-full p-3 sm:p-4 flex items-center justify-between text-left"
+        aria-expanded={isOpen}
+        aria-controls={filterPanelId}
       >
         <div className="flex items-center gap-2">
           <h2 className="text-sm font-semibold text-slate-100">
             {t('stats.filters')}
           </h2>
           {hasFilters && (
-            <span className="px-2 py-0.5 bg-indigo-500/30 text-indigo-300 text-xs rounded-full">
+            <span className="px-2 py-0.5 bg-indigo-500/30 text-indigo-300 text-xs rounded-full" aria-label={`${(filters.generations.length || 0) + (filters.industries.length || 0) + (filters.positions.length || 0)} ${t('stats.activeFilters')}`}>
               {(filters.generations.length || 0) + (filters.industries.length || 0) + (filters.positions.length || 0)}
             </span>
           )}
@@ -102,27 +106,29 @@ export default function StatsFilters({ filters, onChange }) {
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
-      <div className={`${isOpen ? 'block' : 'hidden sm:block'} p-3 sm:p-4 border-t border-slate-700/50`}>
+      <div id={filterPanelId} className={`${isOpen ? 'block' : 'hidden sm:block'} p-3 sm:p-4 border-t border-slate-700/50`} aria-hidden={!isOpen}>
         {hasFilters && (
           <button
             onClick={clearAll}
             className="mb-3 text-xs text-indigo-400 hover:text-indigo-300 transition-colors"
+            aria-label={t('stats.clearFilters')}
           >
             {t('stats.clearFilters')}
           </button>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="text-xs text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs text-slate-400 mb-2 block">
               {t('stats.generation')}
-            </label>
-            <div className="flex flex-wrap gap-1">
+            </legend>
+            <div className="flex flex-wrap gap-1" role="group" aria-label={t('stats.generation')}>
               {generationOptions.map(gen => (
                 <button
                   key={gen}
@@ -132,18 +138,19 @@ export default function StatsFilters({ filters, onChange }) {
                       ? 'bg-indigo-500/30 text-indigo-300 border border-indigo-500'
                       : 'bg-slate-700/50 text-slate-400 border border-slate-600 hover:border-slate-500'
                   }`}
+                  aria-pressed={filters.generations.includes(gen)}
                 >
                   {t(`generations.${gen}`)}
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
 
-          <div>
-            <label className="text-xs text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs text-slate-400 mb-2 block">
               {t('stats.industry')}
-            </label>
-            <div className="flex flex-wrap gap-1">
+            </legend>
+            <div className="flex flex-wrap gap-1" role="group" aria-label={t('stats.industry')}>
               {industryOptions.map(ind => (
                 <button
                   key={ind}
@@ -153,18 +160,19 @@ export default function StatsFilters({ filters, onChange }) {
                       ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500'
                       : 'bg-slate-700/50 text-slate-400 border border-slate-600 hover:border-slate-500'
                   }`}
+                  aria-pressed={filters.industries.includes(ind)}
                 >
                   {translateIndustry(ind)}
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
 
-          <div>
-            <label className="text-xs text-slate-400 mb-2 block">
+          <fieldset>
+            <legend className="text-xs text-slate-400 mb-2 block">
               {t('stats.position')}
-            </label>
-            <div className="flex flex-wrap gap-1">
+            </legend>
+            <div className="flex flex-wrap gap-1" role="group" aria-label={t('stats.position')}>
               {positionOptions.map(pos => (
                 <button
                   key={pos}
@@ -174,12 +182,13 @@ export default function StatsFilters({ filters, onChange }) {
                       ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-500'
                       : 'bg-slate-700/50 text-slate-400 border border-slate-600 hover:border-slate-500'
                   }`}
+                  aria-pressed={filters.positions.includes(pos)}
                 >
                   {translatePosition(pos)}
                 </button>
               ))}
             </div>
-          </div>
+          </fieldset>
         </div>
       </div>
     </div>
