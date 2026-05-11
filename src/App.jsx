@@ -25,7 +25,7 @@ function AppContent() {
     const stored = sessionStorage.getItem('bot_verified');
     return stored === 'true';
   });
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const handleBotVerified = () => {
     setBotVerified(true);
