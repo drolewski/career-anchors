@@ -20,7 +20,7 @@ function AppContent() {
   const [demographics, setDemographics, removeDemographics] = useLocalStorage(SESSION_KEYS.DEMOGRAPHICS, {});
   const [ratings, setRatings, removeRatings] = useLocalStorage(SESSION_KEYS.RATINGS, {});
   const [top3, setTop3, removeTop3] = useLocalStorage(SESSION_KEYS.TOP3, []);
-  const [savedStep, setSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
+  const [savedStep, setSavedStep, removeSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
   const [previousResult] = useLocalStorage(SESSION_KEYS.PREVIOUS_RESULT, null);
   const [wantsRetake, setWantsRetake] = useState(false);
   const [step, setStep] = useState(1);
@@ -46,7 +46,7 @@ function AppContent() {
     removeDemographics();
     removeRatings();
     removeTop3();
-    setSavedStep(null);
+    removeSavedStep();
     localStorage.removeItem(SESSION_KEYS.PREVIOUS_RESULT);
     localStorage.removeItem('bot_verified');
     localStorage.removeItem('already_submitted');
@@ -90,7 +90,6 @@ function AppContent() {
 
   const handleResultsComplete = (result) => {
     localStorage.setItem(SESSION_KEYS.PREVIOUS_RESULT, JSON.stringify(result));
-    clearAllProgress();
   };
 
   useEffect(() => {
@@ -178,6 +177,7 @@ function AppContent() {
             ratings={top3Ratings}
             top3={top3}
             startTime={startTime}
+            isPreviousResult={false}
             onComplete={handleResultsComplete}
           />
         )}

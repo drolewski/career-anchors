@@ -150,8 +150,6 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
   const result = calculateAnchorScores(ratings, top3);
 
   useEffect(() => {
-    if (isPreviousResult) return;
-
     async function saveResult() {
       if (!isSupabaseConfigured()) return;
       
