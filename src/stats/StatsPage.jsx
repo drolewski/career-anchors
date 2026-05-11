@@ -267,7 +267,7 @@ export default function StatsPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
               <AnchorDistribution
                 title={t('stats.primaryAnchor')}
                 data={data?.anchorCounts?.primary || {}}
@@ -288,15 +288,25 @@ export default function StatsPage() {
               />
             </div>
 
-            <AnchorPairs data={data?.anchorPairs || {}} total={data?.total || 0} />
+            <div className="mb-8">
+              <AnchorPairs data={data?.anchorPairs || {}} total={data?.total || 0} />
+            </div>
 
-            <GenerationStats data={data?.generationAnchors || {}} />
+            <div className="mb-8">
+              <GenerationStats data={data?.generationAnchors || {}} />
+            </div>
 
-            <Top3Anchors data={data?.top3Anchors || {}} total={data?.top3Total || 0} />
+            <div className="mb-8">
+              <Top3Anchors data={data?.top3Anchors || {}} total={data?.top3Total || 0} />
+            </div>
 
-            <IndustryStats data={data?.industryAnchors || {}} />
+            <div className="mb-8">
+              <IndustryStats data={data?.industryAnchors || {}} />
+            </div>
 
-            <WeeklyResponses data={data?.weeklyData || []} />
+            <div>
+              <WeeklyResponses data={data?.weeklyData || []} />
+            </div>
           </>
         )}
         </main>

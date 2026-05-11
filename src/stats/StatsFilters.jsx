@@ -83,7 +83,7 @@ export default function StatsFilters({ filters, onChange }) {
   const filterPanelId = 'stats-filter-panel';
 
   return (
-    <div className="glass rounded-xl">
+    <div className="glass rounded-xl mb-8">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
