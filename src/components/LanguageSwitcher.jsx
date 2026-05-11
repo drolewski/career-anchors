@@ -1,5 +1,4 @@
 import { useLang } from '../lib/i18n.jsx';
-import { useNavigate } from 'react-router-dom';
 
 function GBFlag() {
   return (
@@ -24,7 +23,6 @@ function PLFlag() {
 
 export default function LanguageSwitcher() {
   const { lang, switchLang } = useLang();
-  const navigate = useNavigate();
 
   const handleSwitch = (newLang) => {
     switchLang(newLang);
