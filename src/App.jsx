@@ -12,20 +12,47 @@ import AntiBotCheck from './components/AntiBotCheck.jsx';
 import StatsPage from './stats/StatsPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import { useLang } from './lib/i18n.jsx';
+import { useLocalStorage, SESSION_KEYS } from './lib/useSessionStorage.js';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
 function AppContent() {
+  const [demographics, setDemographics, removeDemographics] = useLocalStorage(SESSION_KEYS.DEMOGRAPHICS, {});
+  const [ratings, setRatings, removeRatings] = useLocalStorage(SESSION_KEYS.RATINGS, {});
+  const [top3, setTop3, removeTop3] = useLocalStorage(SESSION_KEYS.TOP3, []);
+  const [savedStep, setSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
+  const [previousResult] = useLocalStorage(SESSION_KEYS.PREVIOUS_RESULT, null);
+  const [wantsRetake, setWantsRetake] = useState(false);
   const [step, setStep] = useState(1);
-  const [demographics, setDemographics] = useState({});
-  const [ratings, setRatings] = useState({});
-  const [top3, setTop3] = useState([]);
+  const [top3Ratings, setTop3Ratings] = useState({});
   const [startTime, setStartTime] = useState(null);
+  
   const [botVerified, setBotVerified] = useState(() => {
-    const stored = sessionStorage.getItem('bot_verified');
-    return stored === 'true';
+    if (localStorage.getItem(SESSION_KEYS.PREVIOUS_RESULT) || localStorage.getItem(SESSION_KEYS.DEMOGRAPHICS)) {
+      return true;
+    }
+    return localStorage.getItem('bot_verified') === 'true';
   });
+  
   const { t, lang } = useLang();
+
+  useEffect(() => {
+    if (savedStep && savedStep > 1 && savedStep < 4) {
+      setStep(savedStep);
+    }
+  }, []);
+
+  const clearAllSession = () => {
+    removeDemographics();
+    removeRatings();
+    removeTop3();
+    setSavedStep(null);
+    localStorage.removeItem(SESSION_KEYS.PREVIOUS_RESULT);
+    localStorage.removeItem('bot_verified');
+    localStorage.removeItem('already_submitted');
+    setStep(1);
+    setWantsRetake(true);
+  };
 
   const skipToMain = () => {
     const main = document.getElementById('main-content');
@@ -37,30 +64,69 @@ function AppContent() {
 
   const handleBotVerified = () => {
     setBotVerified(true);
-    sessionStorage.setItem('bot_verified', 'true');
+    localStorage.setItem('bot_verified', 'true');
+    setWantsRetake(false);
   };
 
   const handleDemographics = (data) => {
     setDemographics(data);
     setStartTime(Date.now());
+    setSavedStep(2);
     setStep(2);
   };
 
   const handleRatings = (data) => {
     setRatings(data);
+    setSavedStep(3);
     setStep(3);
   };
 
-  const handleTop3 = (data) => {
+  const handleTop3 = (data, allRatings) => {
     setTop3(data);
+    setTop3Ratings(allRatings);
+    setSavedStep(4);
     setStep(4);
+  };
+
+  const handleResultsComplete = (result) => {
+    localStorage.setItem(SESSION_KEYS.PREVIOUS_RESULT, JSON.stringify(result));
+    clearAllProgress();
   };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [step]);
 
-  if (!botVerified) {
+  const hasCompletedSurvey = previousResult && botVerified && !wantsRetake;
+  const hasSavedProgress = savedStep === 4 && botVerified && !wantsRetake && demographics && ratings && top3 && top3.length > 0;
+
+  if (hasCompletedSurvey || hasSavedProgress) {
+    const resultData = previousResult || { demographics, ratings, top3, startTime };
+    return (
+      <div className="min-h-screen py-8 px-4 sm:px-6">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-indigo-600 focus:text-white focus:px-4 focus:py-2 focus:rounded"
+          onClick={skipToMain}
+        >
+          {t('accessibility.skipToMain')}
+        </a>
+        <Header />
+        <main id="main-content" tabIndex={-1} className="max-w-3xl mx-auto focus:outline-none">
+          <ResultsStep
+            demographics={resultData.demographics}
+            ratings={resultData.ratings}
+            top3={resultData.top3}
+            startTime={resultData.startTime}
+            isPreviousResult={true}
+            onRetake={clearAllSession}
+          />
+        </main>
+      </div>
+    );
+  }
+
+  if (!botVerified || wantsRetake) {
     return (
       <div className="min-h-screen py-8 px-4 sm:px-6">
         <a
@@ -103,15 +169,16 @@ function AppContent() {
         )}
 
         {step === 3 && (
-          <Top3Step ratings={ratings} onNext={handleTop3} />
+          <Top3Step ratings={ratings} onNext={(sel) => handleTop3(sel, ratings)} />
         )}
 
         {step === 4 && (
           <ResultsStep
             demographics={demographics}
-            ratings={ratings}
+            ratings={top3Ratings}
             top3={top3}
             startTime={startTime}
+            onComplete={handleResultsComplete}
           />
         )}
 

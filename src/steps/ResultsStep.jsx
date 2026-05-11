@@ -70,7 +70,7 @@ function AnchorBar({ code, scoreData, rank, isPrimary }) {
 }
 
 function AnchorDetail({ code, scoreData, isPrimary }) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const anchor = anchors[code];
   const translatedName = t(`anchors.${code}.name`);
   const translatedDesc = t(`anchors.${code}.description`);
@@ -144,23 +144,23 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
   );
 }
 
-export default function ResultsStep({ demographics, ratings, top3, startTime }) {
-  const { t } = useLang();
+export default function ResultsStep({ demographics, ratings, top3, startTime, isPreviousResult, onRetake }) {
+  const { t, lang } = useLang();
   const [saved, setSaved] = useState(false);
-  const savingRef = useRef(false);
   const result = calculateAnchorScores(ratings, top3);
 
   useEffect(() => {
+    if (isPreviousResult) return;
+
     async function saveResult() {
-      if (!isSupabaseConfigured() || savingRef.current) return;
+      if (!isSupabaseConfigured()) return;
       
-      const alreadySubmitted = sessionStorage.getItem('already_submitted');
+      const alreadySubmitted = localStorage.getItem('already_submitted');
       if (alreadySubmitted) {
         console.log('Submission blocked: already submitted in this session');
         return;
       }
       
-      savingRef.current = true;
 
       const payload = {
         birth_year: parseInt(demographics.birthYear),
@@ -184,7 +184,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
         if (error) console.error('Save error:', error);
         else {
           setSaved(true);
-          sessionStorage.setItem('already_submitted', 'true');
+          localStorage.setItem('already_submitted', 'true');
         }
       } catch (err) {
         console.error('Save error:', err);
@@ -218,10 +218,10 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
           ★
         </motion.div>
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 mb-2">
-          {t('results.title')}
+          {isPreviousResult ? t('results.yourPreviousResult') : t('results.title')}
         </h2>
         <p className="text-slate-400 text-sm sm:text-base max-w-lg mx-auto">
-          {t('results.subtitle')}
+          {isPreviousResult ? t('results.previousResultSubtitle') : t('results.subtitle')}
         </p>
         {demographics.generation && (
           <p className="text-xs text-slate-500 mt-2">
@@ -339,30 +339,23 @@ export default function ResultsStep({ demographics, ratings, top3, startTime }) 
         </p>
       </div>
 
-      {isSupabaseConfigured() && (
-        <div className={`rounded-2xl p-4 text-center mb-8 ${
-          saved ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-slate-800/50'
-        }`}>
-          <p className="text-sm text-slate-400">
-            {saved ? t('results.saved') : t('results.saving')}
-          </p>
-        </div>
+      {isPreviousResult && (
+        <button
+          onClick={onRetake}
+          className="w-full py-4 rounded-xl font-semibold text-base transition-all duration-300 bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:shadow-lg hover:shadow-indigo-500/25 mb-4"
+        >
+          {t('results.takeAgain')}
+        </button>
       )}
 
-      {!isSupabaseConfigured() && (
-        <div className="rounded-2xl p-4 text-center mb-8 bg-amber-500/10 border border-amber-500/20">
-          <p className="text-sm text-amber-300">
-            {t('results.configSupabase')}
-          </p>
-        </div>
+      {!isPreviousResult && (
+        <button
+          onClick={() => window.location.reload()}
+          className="w-full py-4 rounded-xl font-semibold text-base transition-all duration-300 bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700"
+        >
+          {t('results.takeAgain')}
+        </button>
       )}
-
-      <button
-        onClick={() => window.location.reload()}
-        className="w-full py-4 rounded-xl font-semibold text-base transition-all duration-300 bg-slate-800 border border-slate-700 text-slate-300 hover:bg-slate-700"
-      >
-        {t('results.takeAgain')}
-      </button>
     </motion.div>
   );
 }

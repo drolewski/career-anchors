@@ -243,7 +243,7 @@ export default function StatsPage() {
           <p className="text-xs text-slate-500 mt-3">
             <a
               href="/about"
-              target="_self"
+              target="_blank"
               className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
             >
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
@@ -319,7 +319,7 @@ export default function StatsPage() {
           <p>
             <a
               href="/about"
-              target="_self"
+              target="_blank"
               className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
             >
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}

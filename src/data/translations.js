@@ -48,6 +48,11 @@ export const translations = {
       "Manager", "Senior Manager", "Director", "VP / C-Level",
       "Consultant", "Freelancer", "Student", "Pensioner", "Other",
     ],
+    branches: [
+      "IT / Technology", "Marketing / Sales", "Finance / Accounting",
+      "HR / People", "Operations", "Product / Design", "Engineering",
+      "Legal", "Healthcare", "Education", "Research", "Construction", "Pensioner", "Other",
+    ],
     industries: [
       "Technology / Software", "Finance / Banking", "Healthcare / Pharma",
       "Manufacturing", "Retail / E-commerce", "Consulting", "Media / Entertainment",
@@ -131,6 +136,9 @@ export const translations = {
       corrected: "Corrected",
       rankingChanged: "Your Top 3 choices changed the final ranking!",
       takeAgain: "Take the Test Again",
+      fillAgain: "Fill Again",
+      yourPreviousResult: "Your Previous Result",
+      previousResultSubtitle: "Here are your saved results from your last assessment.",
     },
     pairingVerbs: {
       TF: "deep-dive into your expertise while maintaining",
@@ -416,6 +424,9 @@ export const translations = {
       corrected: "Skorygowane",
       rankingChanged: "Twój wybór Top 3 zmienił końcową kolejność!",
       takeAgain: "Wypełnij test ponownie",
+      fillAgain: "Wypełnij ponownie",
+      yourPreviousResult: "Twój poprzedni wynik",
+      previousResultSubtitle: "Oto zapisane wyniki z Twojej ostatniej oceny.",
     },
     pairingVerbs: {
       TF: "zagłębiać się w swoją specjalizację, jednocześnie dbając o",

@@ -1,14 +1,23 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SentenceCard from '../components/SentenceCard.jsx';
 import ProgressBar from '../components/ProgressBar.jsx';
 import { useLang } from '../lib/i18n.jsx';
+import { SESSION_KEYS } from '../lib/useSessionStorage.js';
 
 export default function RatingStep({ ratings, onNext }) {
   const { t } = useLang();
   const [currentRatings, setCurrentRatings] = useState(ratings || {});
   const ratedCount = Object.keys(currentRatings).length;
   const cardRefs = useRef([]);
+
+  useEffect(() => {
+    setCurrentRatings(ratings || {});
+  }, [ratings]);
+
+  useEffect(() => {
+    localStorage.setItem(SESSION_KEYS.RATINGS, JSON.stringify(currentRatings));
+  }, [currentRatings]);
 
   const scrollToNext = useCallback((currentId) => {
     for (let nextId = currentId + 1; nextId <= 40; nextId++) {

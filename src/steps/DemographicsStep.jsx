@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { getGeneration } from '../lib/calculations.js';
 import { useLang } from '../lib/i18n.jsx';
@@ -13,6 +13,16 @@ export default function DemographicsStep({ data, onNext }) {
     industry: data.industry || '',
     freeText: data.freeText || '',
   });
+
+  useEffect(() => {
+    setForm({
+      birthYear: data.birthYear || '',
+      position: data.position || '',
+      branch: data.branch || '',
+      industry: data.industry || '',
+      freeText: data.freeText || '',
+    });
+  }, [data]);
 
   const generation = form.birthYear ? getGeneration(parseInt(form.birthYear), lang) : null;
   const isValid = form.birthYear && form.position && form.branch && form.industry;
