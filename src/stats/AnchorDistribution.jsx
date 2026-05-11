@@ -5,7 +5,6 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
-  Legend,
 } from 'recharts';
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
@@ -61,16 +60,16 @@ export default function AnchorDistribution({ title, data, total, colors }) {
 
   return (
     <div className="glass rounded-xl p-4 sm:p-6 h-full">
-      <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">{title}</h2>
-      <div className="relative h-64 sm:h-72 z-10">
+      <h2 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-4 text-slate-100">{title}</h2>
+      <div className="relative h-48 sm:h-56 mb-2">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
               data={chartData}
               cx="50%"
               cy="50%"
-              innerRadius={40}
-              outerRadius={70}
+              innerRadius={30}
+              outerRadius={50}
               paddingAngle={2}
               dataKey="value"
               onMouseEnter={(_, index) => setActiveIndex(index)}
@@ -85,12 +84,31 @@ export default function AnchorDistribution({ title, data, total, colors }) {
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            <Legend
-              wrapperStyle={{ fontSize: '13px', lineHeight: '20px' }}
-              formatter={(value) => <span style={{ color: '#94A3B8' }}>{value}</span>}
-            />
           </PieChart>
         </ResponsiveContainer>
+      </div>
+      <div className="hidden sm:grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+        {chartData.map((entry) => (
+          <div key={entry.name} className="flex items-center gap-1.5">
+            <span
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-slate-400 truncate">{entry.name}</span>
+            <span className="text-slate-500 ml-auto">{total > 0 ? Math.round((entry.value / total) * 100) : 0}%</span>
+          </div>
+        ))}
+      </div>
+      <div className="sm:hidden flex flex-wrap gap-x-3 gap-y-1 text-xs">
+        {chartData.map((entry) => (
+          <div key={entry.name} className="flex items-center gap-1">
+            <span
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ backgroundColor: entry.color }}
+            />
+            <span className="text-slate-400">{entry.value}</span>
+          </div>
+        ))}
       </div>
     </div>
   );

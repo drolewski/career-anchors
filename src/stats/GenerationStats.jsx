@@ -11,7 +11,6 @@ import {
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
-import { TwoLineTick } from './CustomTicks.jsx';
 
 const anchorColors = {
   TF: '#818CF8',
@@ -89,7 +88,7 @@ export default function GenerationStats({ data }) {
 
   const totalResponses = chartData.reduce((sum, gen) => sum + gen.total, 0);
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const genData = chartData.find(g => g.fullName === payload[0].payload.name);
       return (
@@ -115,27 +114,28 @@ export default function GenerationStats({ data }) {
         {t('stats.anchorsByGeneration')}
         <span className="text-slate-400 text-base ml-2">({totalResponses})</span>
       </h2>
-      <div className="h-72 sm:h-80">
+      <div className="h-64 sm:h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 40 }}>
+          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
             <XAxis
               dataKey="name"
-              tick={<TwoLineTick fontSize={11} />}
+              tick={{ fill: '#94A3B8', fontSize: 11 }}
               tickLine={{ stroke: '#334155' }}
               axisLine={{ stroke: '#334155' }}
               interval={0}
             />
             <YAxis
-              tick={{ fill: '#94A3B8', fontSize: 13 }}
+              tick={{ fill: '#94A3B8', fontSize: 11 }}
               tickLine={{ stroke: '#334155' }}
               axisLine={{ stroke: '#334155' }}
               domain={[0, 100]}
               tickFormatter={(v) => `${v}%`}
+              width={40}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend
-              wrapperStyle={{ fontSize: '13px', paddingTop: '12px', lineHeight: '20px' }}
+              wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
               formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
             />
             {anchorOrder.map(code => (

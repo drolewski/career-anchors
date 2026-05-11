@@ -76,25 +76,25 @@ export default function AnchorPairs({ data, total }) {
       <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-slate-100">
         {t('stats.anchorPairs')}
       </h2>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[400px]">
+      <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+        <table className="w-full">
           <thead>
             <tr className="border-b border-slate-700">
-              <th className="text-left py-3 px-3 text-sm font-medium text-slate-400">#</th>
+              <th className="text-left py-3 px-2 text-xs sm:text-sm font-medium text-slate-400">#</th>
               <th
-                className="text-left py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                className="text-left py-3 px-2 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('pair')}
               >
                 {t('stats.pair')} <SortIcon column="pair" />
               </th>
               <th
-                className="text-right py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                className="text-right py-3 px-2 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('count')}
               >
                 {t('stats.count')} <SortIcon column="count" />
               </th>
               <th
-                className="text-right py-3 px-3 text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
+                className="text-right py-3 pl-2 pr-4 text-xs sm:text-sm font-medium text-slate-400 cursor-pointer hover:text-slate-200"
                 onClick={() => handleSort('percentage')}
               >
                 % <SortIcon column="percentage" />
@@ -106,29 +106,29 @@ export default function AnchorPairs({ data, total }) {
               const [a1, a2] = pair.split('+');
               const percentage = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
               return (
-                <tr key={pair} className="border-b border-slate-800 hover:bg-slate-800/30 transition-colors">
-                  <td className="py-3 px-3 text-sm text-slate-500">{index + 1}</td>
-                  <td className="py-3 px-3">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <div className="flex items-center gap-1.5">
+                <tr key={pair} className="border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors">
+                  <td className="py-2 px-2 text-xs sm:text-sm text-slate-500">{index + 1}</td>
+                  <td className="py-2 px-2">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                      <div className="flex items-center gap-1">
                         <span
-                          className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          className="inline-block w-2 h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: anchorColors[a1] }}
                         />
-                        <span className="text-sm text-slate-200">{t(`anchors.${a1}.name`)}</span>
+                        <span className="text-xs sm:text-sm text-slate-200 whitespace-nowrap">{t(`anchors.${a1}.name`)}</span>
                       </div>
-                      <span className="text-slate-600">+</span>
-                      <div className="flex items-center gap-1.5">
+                      <span className="text-slate-600 text-xs">+</span>
+                      <div className="flex items-center gap-1">
                         <span
-                          className="inline-block w-2.5 h-2.5 rounded-full flex-shrink-0"
+                          className="inline-block w-2 h-2 rounded-full flex-shrink-0"
                           style={{ backgroundColor: anchorColors[a2] }}
                         />
-                        <span className="text-sm text-slate-200">{t(`anchors.${a2}.name`)}</span>
+                        <span className="text-xs sm:text-sm text-slate-200 whitespace-nowrap">{t(`anchors.${a2}.name`)}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="py-3 px-3 text-right text-sm font-medium text-cyan-400">{count}</td>
-                  <td className="py-3 px-3 text-right text-sm text-slate-400">{percentage}%</td>
+                  <td className="py-2 px-2 text-right text-xs sm:text-sm font-medium text-cyan-400 whitespace-nowrap">{count}</td>
+                  <td className="py-2 pl-2 pr-4 text-right text-xs sm:text-sm text-slate-400 whitespace-nowrap">{percentage}%</td>
                 </tr>
               );
             })}

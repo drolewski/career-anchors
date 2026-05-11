@@ -225,6 +225,16 @@ export default function StatsPage() {
           <p className="text-slate-400">
             {loading ? t('stats.loading') : `${t('stats.total')}: ${data?.total || 0}`}
           </p>
+          <p className="text-xs text-slate-500 mt-3">
+            <a
+              href="/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
+            >
+              {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
+            </a>
+          </p>
         </div>
 
         <StatsFilters filters={filters} onChange={setFilters} />
@@ -276,20 +286,30 @@ export default function StatsPage() {
         )}
       </div>
 
-      <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-1">
-        <p>{t('app.footer')}</p>
-        <p>
-          {t('app.created')}
-          <a
-            href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
-          >
-            Dominik Rolewski
-          </a>
-        </p>
-      </footer>
+      <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2">
+          <p>{t('app.footer')}</p>
+          <p>
+            {t('app.created')}
+            <a
+              href="https://www.linkedin.com/in/dominik-rolewski-01bba9155/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              Dominik Rolewski
+            </a>
+          </p>
+          <p>
+            <a
+              href="/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
+            </a>
+          </p>
+        </footer>
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   BarChart,
   Bar,
@@ -11,7 +12,6 @@ import {
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
-import { TwoLineTick } from './CustomTicks.jsx';
 
 const anchorColors = {
   TF: '#818CF8',
@@ -34,6 +34,15 @@ export default function IndustryStats({ data }) {
   };
 
   const industries = Object.keys(data).filter(ind => data[ind]?.total >= 3);
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const chartData = industries.map(industry => {
     const item = data[industry];
@@ -112,29 +121,56 @@ export default function IndustryStats({ data }) {
         {t('stats.anchorsByIndustry')}
         <span className="text-slate-400 text-base ml-2">({totalResponses})</span>
       </h2>
-      <div className="h-72 sm:h-80">
+      <div className="h-64 sm:h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 50 }}>
+          <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              dataKey="name"
-              tick={<TwoLineTick fontSize={10} />}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              interval={0}
-            />
-            <YAxis
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              domain={[0, 100]}
-              tickFormatter={(v) => `${v}%`}
-            />
+            {isMobile ? (
+              <YAxis
+                type="category"
+                dataKey="name"
+                tick={{ fill: '#94A3B8', fontSize: 8 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                width={45}
+                tickFormatter={(val) => val.length > 7 ? val.substring(0, 7) + '…' : val}
+              />
+            ) : (
+              <XAxis
+                dataKey="name"
+                tick={{ fill: '#94A3B8', fontSize: 10 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                interval={0}
+                tickFormatter={(val) => val.length > 12 ? val.substring(0, 12) + '…' : val}
+              />
+            )}
+            {isMobile ? (
+              <XAxis
+                type="number"
+                tick={{ fill: '#94A3B8', fontSize: 10 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                domain={[0, 100]}
+                tickFormatter={(v) => `${v}%`}
+              />
+            ) : (
+              <YAxis
+                tick={{ fill: '#94A3B8', fontSize: 11 }}
+                tickLine={{ stroke: '#334155' }}
+                axisLine={{ stroke: '#334155' }}
+                domain={[0, 100]}
+                tickFormatter={(v) => `${v}%`}
+                width={40}
+              />
+            )}
             <Tooltip content={<CustomTooltip />} />
-            <Legend
-              wrapperStyle={{ fontSize: '13px', paddingTop: '12px', lineHeight: '20px' }}
-              formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
-            />
+            {isMobile ? null : (
+              <Legend
+                wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
+                formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}
+              />
+            )}
             {anchorOrder.map(code => (
               <Bar key={code} dataKey={code} fill={anchorColors[code]} stackId="stack" />
             ))}

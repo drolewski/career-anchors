@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from '../data/translations.js';
 
 const LanguageContext = createContext();
@@ -12,6 +12,12 @@ export function LanguageProvider({ children }) {
     setLang(newLang);
     localStorage.setItem('schein-lang', newLang);
   };
+
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    setReloadKey(k => k + 1);
+  }, [lang]);
 
   const t = (path, params = {}) => {
     const keys = path.split('.');
@@ -33,7 +39,7 @@ export function LanguageProvider({ children }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, switchLang, t }}>
+    <LanguageContext.Provider value={{ lang, switchLang, t, reloadKey }}>
       {children}
     </LanguageContext.Provider>
   );

@@ -10,6 +10,7 @@ import Top3Step from './steps/Top3Step.jsx';
 import ResultsStep from './steps/ResultsStep.jsx';
 import AntiBotCheck from './components/AntiBotCheck.jsx';
 import StatsPage from './stats/StatsPage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
 import { useLang } from './lib/i18n.jsx';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
@@ -92,7 +93,7 @@ function AppContent() {
           />
         )}
 
-        <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-1">
+        <footer className="text-center mt-12 mb-6 text-xs text-slate-600 space-y-2">
           <p>{t('app.footer')}</p>
           <p>
             {t('app.created')}
@@ -103,6 +104,16 @@ function AppContent() {
               className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
             >
               Dominik Rolewski
+            </a>
+          </p>
+          <p>
+            <a
+              href="/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
             </a>
           </p>
         </footer>
@@ -118,6 +129,7 @@ function App() {
         <Routes>
           <Route path="/" element={<AppContent />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
         <Analytics/>
         <SpeedInsights/>

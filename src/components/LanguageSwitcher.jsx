@@ -1,4 +1,5 @@
 import { useLang } from '../lib/i18n.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function GBFlag() {
   return (
@@ -23,12 +24,18 @@ function PLFlag() {
 
 export default function LanguageSwitcher() {
   const { lang, switchLang } = useLang();
+  const navigate = useNavigate();
+
+  const handleSwitch = (newLang) => {
+    switchLang(newLang);
+    window.location.href = window.location.pathname;
+  };
 
   return (
     <div className="fixed top-4 right-4 z-50">
       <div className="glass rounded-xl p-1 flex gap-1">
         <button
-          onClick={() => switchLang('pl')}
+          onClick={() => handleSwitch('pl')}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
             lang === 'pl'
               ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'
@@ -40,7 +47,7 @@ export default function LanguageSwitcher() {
           <span className="hidden sm:inline">PL</span>
         </button>
         <button
-          onClick={() => switchLang('en')}
+          onClick={() => handleSwitch('en')}
           className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${
             lang === 'en'
               ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/30'

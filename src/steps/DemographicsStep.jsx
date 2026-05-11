@@ -43,6 +43,16 @@ export default function DemographicsStep({ data, onNext }) {
         <p className="text-slate-400 text-base sm:text-lg max-w-lg mx-auto">
           {t('app.subtitle')}
         </p>
+        <p className="text-xs text-slate-500 mt-3">
+          <a
+            href="/about"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
+          >
+            {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
+          </a>
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

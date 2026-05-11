@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   BarChart,
   Bar,
@@ -11,7 +12,6 @@ import {
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
-import { TwoLineTick, RotatedTwoLineTick } from './CustomTicks.jsx';
 
 const anchorColors = {
   TF: '#818CF8',
@@ -43,6 +43,15 @@ export default function Top3Anchors({ data, total }) {
   const sortedByCount = [...chartData].sort((a, b) => b.count - a.count);
   const mostFrequent = sortedByCount[0];
   const leastFrequent = sortedByCount[sortedByCount.length - 1];
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const hasData = Object.values(data).some(v => v > 0);
 
   if (!hasData) {
@@ -75,6 +84,54 @@ export default function Top3Anchors({ data, total }) {
     }
     return null;
   };
+
+  const chartContent = (
+    <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'}>
+      <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+      {isMobile ? (
+        <YAxis
+          type="category"
+          dataKey="name"
+          tick={{ fill: '#94A3B8', fontSize: 8 }}
+          tickLine={{ stroke: '#334155' }}
+          axisLine={{ stroke: '#334155' }}
+          width={45}
+        />
+      ) : (
+        <XAxis
+          dataKey="name"
+          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tickLine={{ stroke: '#334155' }}
+          axisLine={{ stroke: '#334155' }}
+          interval={0}
+          tickFormatter={(val) => val.length > 14 ? val.substring(0, 14) + '…' : val}
+        />
+      )}
+      {isMobile ? (
+        <XAxis
+          type="number"
+          tick={{ fill: '#94A3B8', fontSize: 10 }}
+          tickLine={{ stroke: '#334155' }}
+          axisLine={{ stroke: '#334155' }}
+          allowDecimals={false}
+        />
+      ) : (
+        <YAxis
+          tick={{ fill: '#94A3B8', fontSize: 11 }}
+          tickLine={{ stroke: '#334155' }}
+          axisLine={{ stroke: '#334155' }}
+          allowDecimals={false}
+          width={35}
+        />
+      )}
+      <Tooltip content={<CustomTooltip />} />
+      <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+        {chartData.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={anchorColors[entry.code]} />
+        ))}
+      </Bar>
+    </BarChart>
+  );
 
   return (
     <div className="glass rounded-xl p-4 sm:p-6">
@@ -120,28 +177,7 @@ export default function Top3Anchors({ data, total }) {
 
       <div className="h-64 sm:h-72">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ top: 10, right: 10, left: 20, bottom: 40 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-            <XAxis
-              dataKey="name"
-              tick={<TwoLineTick fontSize={10} />}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              interval={0}
-            />
-            <YAxis
-              tick={{ fill: '#94A3B8', fontSize: 12 }}
-              tickLine={{ stroke: '#334155' }}
-              axisLine={{ stroke: '#334155' }}
-              allowDecimals={false}
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={anchorColors[entry.code]} />
-              ))}
-            </Bar>
-          </BarChart>
+          {chartContent}
         </ResponsiveContainer>
       </div>
     </div>

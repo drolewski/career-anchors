@@ -113,3 +113,13 @@ input[type="number"] {
 .recharts-tooltip-wrapper {
   z-index: 50 !important;
 }
+
+.recharts-legend-wrapper {
+  padding-bottom: 8px !important;
+}
+
+.recharts-default-legend {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+}
