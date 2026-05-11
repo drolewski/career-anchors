@@ -30,9 +30,6 @@
     
     <!-- Canonical URL - primary domain -->
     <link rel="canonical" href="https://career-anchors.pl/" />
-    
-    <!-- All domain variations (for consistency) -->
-    <link rel="canonical" href="https://career-anchors.pl/" />
     <meta name="dc.identifier" content="https://career-anchors.pl/" />
     
     <!-- Open Graph / Facebook -->
@@ -60,6 +57,81 @@
     <!-- Additional SEO -->
     <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    
+    <!-- Security Headers (via meta for static hosting) -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta name="permissions-policy" content="interest-cohort=()" />
+    
+    <!-- Performance - DNS Prefetch for external resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://www.linkedin.com" />
+    <link rel="dns-prefetch" href="https://supabase.co" />
+    
+    <!-- Performance - Preload critical resources -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/..." as="style" crossorigin />
+    
+    <!-- Structured Data - HowTo (Jak wypełnić ankietę) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "Jak wypełnić test Kotwic Kariery",
+      "description": "Instrukcja wypełnienia ankiety Kotwic Kariery Scheina krok po kroku",
+      "totalTime": "PT15M",
+      "image": "https://career-anchors.pl/og-image.svg",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "name": "Wypełnij dane demograficzne",
+          "text": "Podaj rok urodzenia, stanowisko, dział i branżę. Te informacje pomagają w analizie statystyk.",
+          "position": "1"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Oceń 40 stwierdzeń",
+          "text": "Na skali 1-6 oceń, jak bardzo każde stwierdzenie jest prawdziwe dla Ciebie. 1 = w ogóle, 6 = całkowicie.",
+          "position": "2"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Wybierz 3 najważniejsze",
+          "text": "Z 40 stwierdzeń wybierz 3, które są dla Ciebie najważniejsze w kontekście Twojej kariery.",
+          "position": "3"
+        },
+        {
+          "@type": "HowToStep",
+          "name": "Odkryj swoje Kotwice",
+          "text": "Po zakończeniu otrzymasz wynik z 8 kotwicami kariery, gdzie główna kotwica definiuje Twoją tożsamość zawodową.",
+          "position": "4"
+        }
+      ]
+    }
+    </script>
+    
+    <!-- Structured Data - ItemList (8 kotwic kariery) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "8 Kotwic Kariery według Edgara Scheina",
+      "description": "Lista 8 kotwic kariery stanowiących fundament koncepcji Edgara Scheina z MIT",
+      "numberOfItems": "8",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Kompetencje Techniczne/Funkcjonalne (TF)", "description": "Potrzeba bycia ekspertem w określonej dziedzinie"},
+        {"@type": "ListItem", "position": 2, "name": "Kompetencje Zarządcze (GM)", "description": "Potrzeba przywództwa, odpowiedzialności i wpływu"},
+        {"@type": "ListItem", "position": 3, "name": "Autonomia/Niezależność (AU)", "description": "Potrzeba swobody w określaniu własnych zasad"},
+        {"@type": "ListItem", "position": 4, "name": "Bezpieczeństwo/Stabilność (SE)", "description": "Potrzeba przewidywalności i stabilności zatrudnienia"},
+        {"@type": "ListItem", "position": 5, "name": "Kreatywność Przedsiębiorcza (EC)", "description": "Potrzeba tworzenia czegoś nowego"},
+        {"@type": "ListItem", "position": 6, "name": "Służba/Dedykacja dla sprawy (SV)", "description": "Potrzeba służenia innym zgodnie z wartościami"},
+        {"@type": "ListItem", "position": 7, "name": "Czyste Wyzwanie (CH)", "description": "Potrzeba ciągłych, trudnych wyzwań"},
+        {"@type": "ListItem", "position": 8, "name": "Styl Życia (LS)", "description": "Potrzeba harmonii między pracą a życiem osobistym"}
+      ]
+    }
+    </script>
     
     <!-- Structured Data - WebApplication -->
     <script type="application/ld+json">

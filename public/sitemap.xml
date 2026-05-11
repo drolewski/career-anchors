@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <url>
+    <loc>https://career-anchors.pl/</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://kotwice-kariery.pl/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://career-anchors.pl/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://career-anchors.pl/"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://career-anchors.pl/og-image.svg</image:loc>
+      <image:title>Kotwice Kariery Scheina - Test Kariery Online</image:title>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://career-anchors.pl/about</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://kotwice-kariery.pl/about"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://career-anchors.pl/en/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://career-anchors.pl/about"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://career-anchors.pl/stats</loc>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://kotwice-kariery.pl/stats"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://career-anchors.pl/en/stats"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://career-anchors.pl/stats"/>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+</urlset>

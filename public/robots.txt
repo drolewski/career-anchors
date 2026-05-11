@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://career-anchors.pl/sitemap.xml
+
+# Allow search engines to crawl important pages
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /stats
+
+# Disallow non-essential pages
+Disallow: /api/
+
+# Crawl delay (optional, be nice to other sites)
+Crawl-delay: 1
+
+# Sitemap location hint
+Sitemap: https://career-anchors.pl/sitemap.xml
