@@ -101,6 +101,16 @@ export default function NotFoundPage() {
               {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
             </a>
           </p>
+          <p>
+            <a
+                href="/docs/analiza-zetki.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {t('research.footerLink')}
+            </a>
+          </p>
         </footer>
       </div>
     </div>

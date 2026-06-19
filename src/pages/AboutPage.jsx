@@ -127,6 +127,11 @@ export default function AboutPage() {
       takeTest: "Rozpocznij ankietę",
       stats: "Zobacz statystyki",
       learnMore: "Dowiedz się więcej"
+    },
+    research: {
+      title: "Rezultat badań",
+      description: "Analiza porównawcza kotwic kariery pokolenia Z na tle starszych generacji pracowników",
+      link: "Pobierz analizę (.pdf)",
     }
   } : {
     title: "What Are Career Anchors?",
@@ -249,6 +254,11 @@ export default function AboutPage() {
       takeTest: "Start the survey",
       stats: "View statistics",
       learnMore: "Learn more"
+    },
+    research: {
+      title: "Research Result",
+      description: "Comparative analysis of career anchors of Generation Z against older employee generations",
+      link: "Download analysis (.pdf)",
     }
   };
 
@@ -412,6 +422,24 @@ export default function AboutPage() {
               </p>
             </div>
           </section>
+
+          <section className="mb-12" aria-labelledby="research-title">
+            <h2 id="research-title" className="text-xl font-semibold text-slate-200 mb-4">{content.research.title}</h2>
+            <div className="glass rounded-2xl p-6 sm:p-8 space-y-4">
+              <p className="text-slate-300 leading-relaxed text-sm">{content.research.description}</p>
+              <a
+                href="/docs/analiza-zetki.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-indigo-400 hover:text-indigo-300 transition-colors underline underline-offset-2"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                {content.research.link}
+              </a>
+            </div>
+          </section>
         </main>
 
         <nav className="sticky bottom-0 left-0 right-0 z-40 bg-gradient-to-t from-slate-800 via-slate-800/95 to-transparent pt-8 pb-4" aria-label={lang === 'pl' ? 'Działania na stronie' : 'Page actions'}>
@@ -459,6 +487,16 @@ export default function AboutPage() {
                   className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
               >
                 {lang === 'pl' ? 'Dowiedz się więcej o Kotwicach Kariery' : 'Learn more about Career Anchors'}
+              </a>
+            </p>
+            <p>
+              <a
+                  href="/docs/analiza-zetki.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+              >
+                {t('research.footerLink')}
               </a>
             </p>
             <p>

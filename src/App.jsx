@@ -176,6 +176,16 @@ function AppContent() {
           </p>
           <p>
             <a
+              href="/docs/analiza-zetki.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-500 hover:text-indigo-400 transition-colors underline underline-offset-2"
+            >
+              {t('research.footerLink')}
+            </a>
+          </p>
+          <p>
+            <a
               href="/privacy"
               target="_self"
               className="text-slate-600 hover:text-indigo-400 transition-colors underline underline-offset-2"

@@ -9,11 +9,17 @@ export const translations = {
       check: "Verify",
       wrongAnswer: "Wrong answer, please try again.",
     },
-nav: {
+    nav: {
       mainNav: "Main navigation",
       survey: "Take Survey",
       stats: "Statistics",
       about: "About",
+    },
+    research: {
+      title: "Research Result",
+      description: "Comparative analysis of career anchors of Generation Z against older employee generations",
+      link: "Download analysis (.pdf)",
+      footerLink: "Research analysis",
     },
     accessibility: {
       skipToMain: "Skip to main content",
@@ -336,6 +342,12 @@ nav: {
       survey: "Wypełnij ankietę",
       stats: "Statystyki",
       about: "O Kotwicach",
+    },
+    research: {
+      title: "Rezultat badań",
+      description: "Analiza porównawcza kotwic kariery pokolenia Z na tle starszych generacji pracowników",
+      link: "Pobierz analizę (.pdf)",
+      footerLink: "Analiza badań",
     },
     accessibility: {
       skipToMain: "Przejdź do głównej treści",
