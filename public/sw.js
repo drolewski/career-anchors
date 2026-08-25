@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kotwice-kariery-v1';
+const CACHE_NAME = 'kotwice-kariery-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -48,9 +48,7 @@ self.addEventListener('fetch', (event) => {
 
   if (url.pathname.startsWith('/stats') && request.headers.get('Accept')?.includes('text/html')) {
     event.respondWith(
-      caches.match('/index.html').then((response) => {
-        return response || fetch(request);
-      })
+      fetch(request).catch(() => caches.match('/index.html'))
     );
     return;
   }
