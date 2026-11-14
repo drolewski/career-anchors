@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import { getAnchorForSentence, anchors } from '../data/anchors.js';
 import { useLang } from '../lib/i18n.jsx';
 
@@ -22,7 +22,7 @@ export default function Top3Step({ ratings, onNext }) {
   });
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -80,7 +80,7 @@ export default function Top3Step({ ratings, onNext }) {
           };
 
           return (
-            <motion.button
+            <Motion.button
               key={id}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -126,7 +126,7 @@ export default function Top3Step({ ratings, onNext }) {
                   </div>
                 </div>
               </div>
-            </motion.button>
+            </Motion.button>
           );
         })}
       </div>
@@ -151,6 +151,6 @@ export default function Top3Step({ ratings, onNext }) {
           </button>
         </div>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 }

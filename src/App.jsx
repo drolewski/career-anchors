@@ -27,17 +27,11 @@ function AppContent() {
   const [savedStep, setSavedStep] = useLocalStorage(SESSION_KEYS.STEP, null);
   const [previousResult] = useLocalStorage(SESSION_KEYS.PREVIOUS_RESULT, null);
   const [wantsRetake, setWantsRetake] = useState(false);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(() => savedStep > 1 && savedStep < 4 ? savedStep : 1);
   const [top3Ratings, setTop3Ratings] = useState({});
   const [startTime, setStartTime] = useState(null);
   
   const { t, lang } = useLang();
-
-  useEffect(() => {
-    if (savedStep && savedStep > 1 && savedStep < 4) {
-      setStep(savedStep);
-    }
-  }, []);
 
   const clearAllSession = () => {
     removeDemographics();

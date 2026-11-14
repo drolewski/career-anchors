@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion as Motion } from 'framer-motion';
 import { getGeneration } from '../lib/calculations.js';
 import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
@@ -13,16 +13,6 @@ export default function DemographicsStep({ data, onNext }) {
     industry: data.industry || '',
     freeText: data.freeText || '',
   });
-
-  useEffect(() => {
-    setForm({
-      birthYear: data.birthYear || '',
-      position: data.position || '',
-      branch: data.branch || '',
-      industry: data.industry || '',
-      freeText: data.freeText || '',
-    });
-  }, [data]);
 
   const generation = form.birthYear ? getGeneration(parseInt(form.birthYear), lang) : null;
   const isValid = form.birthYear && form.position && form.branch && form.industry;
@@ -40,7 +30,7 @@ export default function DemographicsStep({ data, onNext }) {
   const industries = allT.industries || [];
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -93,7 +83,7 @@ export default function DemographicsStep({ data, onNext }) {
                 ))}
               </select>
               {generation && (
-                <motion.p
+                <Motion.p
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-xs text-cyan-400 mt-1.5 flex items-center gap-1"
@@ -104,7 +94,7 @@ export default function DemographicsStep({ data, onNext }) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {t('demographics.generation')}: {generation}
-                </motion.p>
+                </Motion.p>
               )}
               <span id="birthYear-hint" className="sr-only">{t('demographics.yearHint')}</span>
             </div>
@@ -207,6 +197,6 @@ export default function DemographicsStep({ data, onNext }) {
           <p id="form-required-hint" className="sr-only">{t('demographics.requiredHint')}</p>
         )}
       </form>
-    </motion.div>
+    </Motion.div>
   );
 }

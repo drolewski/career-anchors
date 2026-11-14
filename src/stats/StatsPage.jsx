@@ -12,7 +12,7 @@ import StatsFilters from './StatsFilters.jsx';
 import Top3Anchors from './Top3Anchors.jsx';
 import { anchorOrder, getAnchorForSentence } from '../data/anchors.js';
 import { translations } from '../data/translations.js';
-import { normalizeResponse, normalizeFilters } from './normalizer.js';
+import { normalizeResponse } from './normalizer.js';
 
 export default function StatsPage() {
   const [data, setData] = useState(null);
@@ -34,173 +34,173 @@ export default function StatsPage() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [filters]);
-
-  const fetchData = async () => {
-    if (!supabase) {
-      setError('Supabase not configured');
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    try {
-      let query = supabase
-        .from('schein_responses')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      const { data: responses, error: fetchError } = await query;
-
-      if (fetchError) throw fetchError;
-
-      let normalizedResponses = (responses || []).map(normalizeResponse);
-
-      if (filters.generations.length > 0) {
-        normalizedResponses = normalizedResponses.filter(r => filters.generations.includes(r.generation));
-      }
-      if (filters.industries.length > 0) {
-        normalizedResponses = normalizedResponses.filter(r => filters.industries.includes(r.industry));
-      }
-      if (filters.positions.length > 0) {
-        normalizedResponses = normalizedResponses.filter(r => filters.positions.includes(r.position));
-      }
-      if (filters.dateFrom) {
-        normalizedResponses = normalizedResponses.filter(r => r.created_at >= filters.dateFrom);
-      }
-      if (filters.dateTo) {
-        normalizedResponses = normalizedResponses.filter(r => r.created_at <= filters.dateTo);
+    const fetchData = async () => {
+      if (!supabase) {
+        setError('Supabase not configured');
+        setLoading(false);
+        return;
       }
 
-      const stats = calculateStats(normalizedResponses);
-      setData(stats);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      setLoading(true);
+      try {
+        let query = supabase
+          .from('schein_responses')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-  const calculateStats = (responses) => {
-    const total = responses.length;
+        const { data: responses, error: fetchError } = await query;
 
-    const weeklyData = getWeeklyData(responses);
+        if (fetchError) throw fetchError;
 
-    const anchorCounts = { primary: {}, secondary: {}, tertiary: {} };
-    const anchorPairs = {};
-    const generationAnchors = {};
-    const industryAnchors = {};
-    const top3Anchors = {};
-    anchorOrder.forEach(code => {
-      anchorCounts.primary[code] = 0;
-      anchorCounts.secondary[code] = 0;
-      anchorCounts.tertiary[code] = 0;
-      top3Anchors[code] = 0;
-    });
+        let normalizedResponses = (responses || []).map(normalizeResponse);
 
-    let top3Total = 0;
-
-    responses.forEach(r => {
-      if (r.primary_anchor) {
-        anchorCounts.primary[r.primary_anchor] = (anchorCounts.primary[r.primary_anchor] || 0) + 1;
-      }
-      if (r.secondary_anchor) {
-        anchorCounts.secondary[r.secondary_anchor] = (anchorCounts.secondary[r.secondary_anchor] || 0) + 1;
-      }
-      if (r.tertiary_anchor) {
-        anchorCounts.tertiary[r.tertiary_anchor] = (anchorCounts.tertiary[r.tertiary_anchor] || 0) + 1;
-      }
-
-      if (r.top_3 && Array.isArray(r.top_3)) {
-        r.top_3.forEach(sentenceId => {
-          const anchor = getAnchorForSentence(sentenceId);
-          if (anchor) {
-            top3Anchors[anchor] = (top3Anchors[anchor] || 0) + 1;
-          }
-        });
-      }
-
-      if (r.primary_anchor && r.secondary_anchor) {
-        const pair = [r.primary_anchor, r.secondary_anchor].sort().join('+');
-        anchorPairs[pair] = (anchorPairs[pair] || 0) + 1;
-      }
-
-      if (r.generation && r.primary_anchor) {
-        if (!generationAnchors[r.generation]) {
-          generationAnchors[r.generation] = { total: 0 };
-          anchorOrder.forEach(code => {
-            generationAnchors[r.generation][code] = 0;
-          });
+        if (filters.generations.length > 0) {
+          normalizedResponses = normalizedResponses.filter(r => filters.generations.includes(r.generation));
         }
-        generationAnchors[r.generation].total++;
-        generationAnchors[r.generation][r.primary_anchor]++;
-      }
-
-      if (r.industry && r.primary_anchor) {
-        if (!industryAnchors[r.industry]) {
-          industryAnchors[r.industry] = { total: 0 };
-          anchorOrder.forEach(code => {
-            industryAnchors[r.industry][code] = 0;
-          });
+        if (filters.industries.length > 0) {
+          normalizedResponses = normalizedResponses.filter(r => filters.industries.includes(r.industry));
         }
-        industryAnchors[r.industry].total++;
-        industryAnchors[r.industry][r.primary_anchor]++;
+        if (filters.positions.length > 0) {
+          normalizedResponses = normalizedResponses.filter(r => filters.positions.includes(r.position));
+        }
+        if (filters.dateFrom) {
+          normalizedResponses = normalizedResponses.filter(r => r.created_at >= filters.dateFrom);
+        }
+        if (filters.dateTo) {
+          normalizedResponses = normalizedResponses.filter(r => r.created_at <= filters.dateTo);
+        }
+
+        const stats = calculateStats(normalizedResponses);
+        setData(stats);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
       }
-    });
-
-    top3Total = Object.values(top3Anchors).reduce((sum, v) => sum + v, 0);
-
-    return {
-      total,
-      weeklyData,
-      anchorCounts,
-      anchorPairs,
-      generationAnchors,
-      industryAnchors,
-      top3Anchors,
-      top3Total,
     };
-  };
 
-  const getWeeklyData = (responses) => {
-    const weeks = {};
-    const now = new Date();
+    const calculateStats = (responses) => {
+      const total = responses.length;
 
-    for (let i = 11; i >= 0; i--) {
-      const weekStart = new Date(now);
-      weekStart.setDate(now.getDate() - (i * 7));
-      weekStart.setHours(0, 0, 0, 0);
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 6);
-      weekEnd.setHours(23, 59, 59, 999);
+      const weeklyData = getWeeklyData(responses);
 
-      const weekKey = weekStart.toISOString().split('T')[0];
-      const label = weekStart.toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-US', {
-        month: 'short',
-        day: 'numeric'
+      const anchorCounts = { primary: {}, secondary: {}, tertiary: {} };
+      const anchorPairs = {};
+      const generationAnchors = {};
+      const industryAnchors = {};
+      const top3Anchors = {};
+      anchorOrder.forEach(code => {
+        anchorCounts.primary[code] = 0;
+        anchorCounts.secondary[code] = 0;
+        anchorCounts.tertiary[code] = 0;
+        top3Anchors[code] = 0;
       });
 
-      weeks[weekKey] = { label, count: 0 };
-    }
+      let top3Total = 0;
 
-    responses.forEach(r => {
-      if (!r.created_at) return;
-      const created = new Date(r.created_at);
-      for (const [weekKey, weekData] of Object.entries(weeks)) {
-        const weekStart = new Date(weekKey);
-        const weekEnd = new Date(weekStart);
-        weekEnd.setDate(weekStart.getDate() + 7);
-        if (created >= weekStart && created < weekEnd) {
-          weeks[weekKey].count++;
-          break;
+      responses.forEach(r => {
+        if (r.primary_anchor) {
+          anchorCounts.primary[r.primary_anchor] = (anchorCounts.primary[r.primary_anchor] || 0) + 1;
         }
-      }
-    });
+        if (r.secondary_anchor) {
+          anchorCounts.secondary[r.secondary_anchor] = (anchorCounts.secondary[r.secondary_anchor] || 0) + 1;
+        }
+        if (r.tertiary_anchor) {
+          anchorCounts.tertiary[r.tertiary_anchor] = (anchorCounts.tertiary[r.tertiary_anchor] || 0) + 1;
+        }
 
-    return Object.values(weeks);
-  };
+        if (r.top_3 && Array.isArray(r.top_3)) {
+          r.top_3.forEach(sentenceId => {
+            const anchor = getAnchorForSentence(sentenceId);
+            if (anchor) {
+              top3Anchors[anchor] = (top3Anchors[anchor] || 0) + 1;
+            }
+          });
+        }
+
+        if (r.primary_anchor && r.secondary_anchor) {
+          const pair = [r.primary_anchor, r.secondary_anchor].sort().join('+');
+          anchorPairs[pair] = (anchorPairs[pair] || 0) + 1;
+        }
+
+        if (r.generation && r.primary_anchor) {
+          if (!generationAnchors[r.generation]) {
+            generationAnchors[r.generation] = { total: 0 };
+            anchorOrder.forEach(code => {
+              generationAnchors[r.generation][code] = 0;
+            });
+          }
+          generationAnchors[r.generation].total++;
+          generationAnchors[r.generation][r.primary_anchor]++;
+        }
+
+        if (r.industry && r.primary_anchor) {
+          if (!industryAnchors[r.industry]) {
+            industryAnchors[r.industry] = { total: 0 };
+            anchorOrder.forEach(code => {
+              industryAnchors[r.industry][code] = 0;
+            });
+          }
+          industryAnchors[r.industry].total++;
+          industryAnchors[r.industry][r.primary_anchor]++;
+        }
+      });
+
+      top3Total = Object.values(top3Anchors).reduce((sum, v) => sum + v, 0);
+
+      return {
+        total,
+        weeklyData,
+        anchorCounts,
+        anchorPairs,
+        generationAnchors,
+        industryAnchors,
+        top3Anchors,
+        top3Total,
+      };
+    };
+
+    const getWeeklyData = (responses) => {
+      const weeks = {};
+      const now = new Date();
+
+      for (let i = 11; i >= 0; i--) {
+        const weekStart = new Date(now);
+        weekStart.setDate(now.getDate() - (i * 7));
+        weekStart.setHours(0, 0, 0, 0);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        weekEnd.setHours(23, 59, 59, 999);
+
+        const weekKey = weekStart.toISOString().split('T')[0];
+        const label = weekStart.toLocaleDateString(lang === 'pl' ? 'pl-PL' : 'en-US', {
+          month: 'short',
+          day: 'numeric'
+        });
+
+        weeks[weekKey] = { label, count: 0 };
+      }
+
+      responses.forEach(r => {
+        if (!r.created_at) return;
+        const created = new Date(r.created_at);
+        for (const weekKey of Object.keys(weeks)) {
+          const weekStart = new Date(weekKey);
+          const weekEnd = new Date(weekStart);
+          weekEnd.setDate(weekStart.getDate() + 7);
+          if (created >= weekStart && created < weekEnd) {
+            weeks[weekKey].count++;
+            break;
+          }
+        }
+      });
+
+      return Object.values(weeks);
+    };
+
+    fetchData();
+  }, [filters, lang]);
 
   if (error) {
     return (

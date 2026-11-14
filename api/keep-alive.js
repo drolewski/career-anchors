@@ -1,6 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
 export default async function handler(req, res) {
+  if (req.method !== 'GET') {
+    res.setHeader('Allow', 'GET');
+    return res.status(405).json({ status: 'error', message: 'Method not allowed' });
+  }
+  const secret = process.env.CRON_SECRET;
+  if (!secret || req.headers.authorization !== `Bearer ${secret}`) {
+    return res.status(401).json({ status: 'error', message: 'Unauthorized' });
+  }
+
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -27,10 +36,10 @@ export default async function handler(req, res) {
       status: 'ok',
       timestamp: new Date().toISOString(),
     });
-  } catch (err) {
+  } catch {
     return res.status(500).json({
       status: 'error',
-      message: err.message,
+      message: 'Database health check failed',
     });
   }
 }

@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import SentenceCard from '../components/SentenceCard.jsx';
 import ProgressBar from '../components/ProgressBar.jsx';
 import { useLang } from '../lib/i18n.jsx';
@@ -8,12 +8,7 @@ import { SESSION_KEYS } from '../lib/useSessionStorage.js';
 export default function RatingStep({ ratings, onNext }) {
   const { t } = useLang();
   const [currentRatings, setCurrentRatings] = useState(ratings || {});
-  const ratedCount = Object.keys(currentRatings).length;
   const cardRefs = useRef([]);
-
-  useEffect(() => {
-    setCurrentRatings(ratings || {});
-  }, [ratings]);
 
   useEffect(() => {
     localStorage.setItem(SESSION_KEYS.RATINGS, JSON.stringify(currentRatings));
@@ -46,7 +41,7 @@ export default function RatingStep({ ratings, onNext }) {
   const allRated = Object.keys(currentRatings).length === 40;
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
@@ -104,6 +99,6 @@ export default function RatingStep({ ratings, onNext }) {
           </button>
         </div>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 }

@@ -23,6 +23,26 @@ const anchorColors = {
   LS: '#14B8A6',
 };
 
+const CustomTooltip = ({ active, payload, chartData, t }) => {
+  if (active && payload && payload.length) {
+    const genData = chartData.find(g => g.fullName === payload[0].payload.name);
+    return (
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
+        <p className="font-semibold text-slate-100 mb-2">
+          {payload[0].payload.name}
+          <span className="text-slate-400 font-normal ml-1">({genData?.total})</span>
+        </p>
+        {payload.map((entry, index) => (
+          <p key={index} style={{ color: entry.color }} className="text-sm">
+            {t(`anchors.${entry.name}.name`)}: <span className="font-semibold">{entry.value}%</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function GenerationStats({ data }) {
   const { lang } = useLang();
   const t = (key) => {
@@ -88,25 +108,7 @@ export default function GenerationStats({ data }) {
 
   const totalResponses = chartData.reduce((sum, gen) => sum + gen.total, 0);
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const genData = chartData.find(g => g.fullName === payload[0].payload.name);
-      return (
-        <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
-          <p className="font-semibold text-slate-100 mb-2">
-            {payload[0].payload.name}
-            <span className="text-slate-400 font-normal ml-1">({genData?.total})</span>
-          </p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
-              {t(`anchors.${entry.name}.name`)}: <span className="font-semibold">{entry.value}%</span>
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   const chartDescription = chartData.map(gen => 
     `${gen.name}: ${totalResponses > 0 ? Object.entries(gen)
@@ -141,7 +143,7 @@ export default function GenerationStats({ data }) {
                 tickFormatter={(v) => `${v}%`}
                 width={40}
               />
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<CustomTooltip chartData={chartData} t={t} />} />
               <Legend
                 wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
                 formatter={(value) => <span style={{ color: '#94A3B8' }}>{t(`anchors.${value}.name`)}</span>}

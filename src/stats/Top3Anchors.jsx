@@ -24,6 +24,24 @@ const anchorColors = {
   LS: '#14B8A6',
 };
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length && payload[0]) {
+    const item = payload[0].payload;
+    return (
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
+        <p style={{ color: anchorColors[item.code] }} className="text-sm font-medium">
+          {item.name}
+        </p>
+        <p className="text-sm">
+          <span style={{ color: '#06B6D4', fontWeight: 600 }}>{item.count}</span>
+          <span style={{ color: '#94A3B8' }}> ({item.percentage.toFixed(1)}%)</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function Top3Anchors({ data, total }) {
   const { lang } = useLang();
   const t = (key) => {
@@ -67,23 +85,7 @@ export default function Top3Anchors({ data, total }) {
     );
   }
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length && payload[0]) {
-      const item = payload[0].payload;
-      return (
-        <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
-          <p style={{ color: anchorColors[item.code] }} className="text-sm font-medium">
-            {item.name}
-          </p>
-          <p className="text-sm">
-            <span style={{ color: '#06B6D4', fontWeight: 600 }}>{item.count}</span>
-            <span style={{ color: '#94A3B8' }}> ({item.percentage.toFixed(1)}%)</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   const chartContent = (
     <BarChart data={chartData} margin={{ top: 5, right: 5, left: isMobile ? 50 : 10, bottom: 5 }} layout={isMobile ? 'vertical' : 'horizontal'}>
@@ -124,7 +126,7 @@ export default function Top3Anchors({ data, total }) {
           width={35}
         />
       )}
-      <Tooltip content={<CustomTooltip />} />
+      <Tooltip content={<CustomTooltip  />} />
       <Bar dataKey="count" radius={[4, 4, 0, 0]}>
         {chartData.map((entry, index) => (
           <Cell key={`cell-${index}`} fill={anchorColors[entry.code]} />

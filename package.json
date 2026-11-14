@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "node --test"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.100.1",
@@ -32,5 +33,9 @@
     "globals": "^17.4.0",
     "tailwindcss": "^4.2.2",
     "vite": "^8.0.1"
+  },
+  "description": "Historical bilingual career anchors questionnaire; succeeded by aptido.io.",
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

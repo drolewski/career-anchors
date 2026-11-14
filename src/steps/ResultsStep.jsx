@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion as Motion } from 'framer-motion';
 import { anchors, getAnchorForSentence } from '../data/anchors.js';
 import { calculateAnchorScores } from '../lib/calculations.js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase.js';
@@ -12,7 +12,7 @@ function AnchorBar({ code, scoreData, rank, isPrimary }) {
   const translatedName = t(`anchors.${code}.name`);
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: rank * 0.08 }}
@@ -57,7 +57,7 @@ function AnchorBar({ code, scoreData, rank, isPrimary }) {
         </span>
       </div>
       <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
-        <motion.div
+        <Motion.div
           className="h-full rounded-full anchor-bar"
           style={{ backgroundColor: anchor.color }}
           initial={{ width: 0 }}
@@ -65,12 +65,12 @@ function AnchorBar({ code, scoreData, rank, isPrimary }) {
           transition={{ duration: 1, delay: rank * 0.1, ease: [0.4, 0, 0.2, 1] }}
         />
       </div>
-    </motion.div>
+    </Motion.div>
   );
 }
 
 function AnchorDetail({ code, scoreData, isPrimary }) {
-  const { t, lang } = useLang();
+  const { t } = useLang();
   const anchor = anchors[code];
   const translatedName = t(`anchors.${code}.name`);
   const translatedDesc = t(`anchors.${code}.description`);
@@ -78,7 +78,7 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
   const translatedMotiv = t(`anchors.${code}.motivation`);
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className={`rounded-2xl p-6 sm:p-8 ${isPrimary ? 'ring-2' : 'glass'}`}
@@ -140,13 +140,12 @@ function AnchorDetail({ code, scoreData, isPrimary }) {
           </p>
         </div>
       </div>
-    </motion.div>
+    </Motion.div>
   );
 }
 
 export default function ResultsStep({ demographics, ratings, top3, startTime, isPreviousResult, onRetake }) {
   const { t, lang } = useLang();
-  const [saved, setSaved] = useState(false);
   const result = calculateAnchorScores(ratings, top3);
   const saveAttemptedRef = useRef(false);
 
@@ -185,13 +184,11 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
       };
 
       try {
-        console.log('Payload:', payload);
         const { error } = await supabase.from('schein_responses').insert(payload);
         if (error) {
           console.error('Save error:', error);
         } else {
           console.log('Saved successfully!');
-          setSaved(true);
           localStorage.setItem('already_submitted', 'true');
         }
       } catch (err) {
@@ -199,7 +196,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
       }
     }
     saveResult();
-  }, []);
+  }, [demographics, ratings, top3, startTime, result.scores, result.primary, result.secondary, result.tertiary]);
 
   const primaryAnchor = anchors[result.primary];
   const secondaryAnchor = anchors[result.secondary];
@@ -210,13 +207,13 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
   const rankingChanged = result.rawSorted[0].code !== result.sorted[0].code;
 
   return (
-    <motion.div
+    <Motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
     >
       <div className="text-center mb-10">
-        <motion.div
+        <Motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15 }}
@@ -224,7 +221,7 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
           style={{ background: `linear-gradient(135deg, ${primaryAnchor.color} 0%, ${primaryAnchor.color}CC 100%)` }}
         >
           ★
-        </motion.div>
+        </Motion.div>
         <h2 className="text-2xl sm:text-3xl font-bold text-slate-100 mb-2">
           {isPreviousResult ? t('results.yourPreviousResult') : t('results.title')}
         </h2>
@@ -415,6 +412,6 @@ export default function ResultsStep({ demographics, ratings, top3, startTime, is
           </a>
         </p>
       </footer>
-    </motion.div>
+    </Motion.div>
   );
 }

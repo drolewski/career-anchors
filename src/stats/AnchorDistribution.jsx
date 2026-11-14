@@ -10,6 +10,24 @@ import { useLang } from '../lib/i18n.jsx';
 import { translations } from '../data/translations.js';
 import { anchorOrder } from '../data/anchors.js';
 
+const CustomTooltip = ({ active, payload, total }) => {
+  if (active && payload && payload.length && payload[0]) {
+    const percentage = total > 0 ? Math.round((payload[0].value / total) * 100) : 0;
+    return (
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
+        <p style={{ color: payload[0].payload.color }} className="text-sm font-medium">
+          {payload[0].name}
+        </p>
+        <p className="text-sm">
+          <span style={{ color: '#06B6D4', fontWeight: 600 }}>{payload[0].value}</span>
+          <span style={{ color: '#94A3B8' }}> ({percentage}%)</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function AnchorDistribution({ title, data, total, colors }) {
   const { lang } = useLang();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -40,23 +58,7 @@ export default function AnchorDistribution({ title, data, total, colors }) {
     );
   }
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length && payload[0]) {
-      const percentage = total > 0 ? Math.round((payload[0].value / total) * 100) : 0;
-      return (
-        <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50">
-          <p style={{ color: payload[0].payload.color }} className="text-sm font-medium">
-            {payload[0].name}
-          </p>
-          <p className="text-sm">
-            <span style={{ color: '#06B6D4', fontWeight: 600 }}>{payload[0].value}</span>
-            <span style={{ color: '#94A3B8' }}> ({percentage}%)</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   return (
     <div className="glass rounded-xl p-4 sm:p-6 h-full">
@@ -83,7 +85,7 @@ export default function AnchorDistribution({ title, data, total, colors }) {
                 />
               ))}
             </Pie>
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip total={total} />} />
           </PieChart>
         </ResponsiveContainer>
       </div>

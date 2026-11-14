@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion as Motion } from 'framer-motion';
 import RatingButton from './RatingButton.jsx';
 import { getAnchorForSentence } from '../data/anchors.js';
 import { useLang } from '../lib/i18n.jsx';
@@ -22,7 +22,7 @@ const SentenceCard = forwardRef(function SentenceCard({ sentenceId, rating, onRa
   const translatedText = t(`sentences.${sentenceId}`);
 
   return (
-    <motion.div
+    <Motion.div
       ref={ref}
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
@@ -61,7 +61,7 @@ const SentenceCard = forwardRef(function SentenceCard({ sentenceId, rating, onRa
           </span>
         </div>
       )}
-    </motion.div>
+    </Motion.div>
   );
 });
 

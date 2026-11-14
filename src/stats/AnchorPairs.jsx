@@ -13,6 +13,13 @@ const anchorColors = {
   LS: '#14B8A6',
 };
 
+const SortIcon = ({ column, sortConfig }) => {
+  if (sortConfig.key !== column) {
+    return <span className="ml-1 text-slate-600">↕</span>;
+  }
+  return <span className="ml-1 text-cyan-400">{sortConfig.direction === 'desc' ? '↓' : '↑'}</span>;
+};
+
 export default function AnchorPairs({ data, total }) {
   const { lang } = useLang();
   const t = (key) => {
@@ -51,12 +58,7 @@ export default function AnchorPairs({ data, total }) {
     }));
   };
 
-  const SortIcon = ({ column }) => {
-    if (sortConfig.key !== column) {
-      return <span className="ml-1 text-slate-600">↕</span>;
-    }
-    return <span className="ml-1 text-cyan-400">{sortConfig.direction === 'desc' ? '↓' : '↑'}</span>;
-  };
+
 
   if (Object.keys(data).length === 0) {
     return (
@@ -87,7 +89,7 @@ export default function AnchorPairs({ data, total }) {
                 onClick={() => handleSort('pair')}
                 aria-sort={sortConfig.key === 'pair' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
-                {t('stats.pair')} <SortIcon column="pair" />
+                {t('stats.pair')} <SortIcon sortConfig={sortConfig} column="pair" />
               </th>
               <th
                 scope="col"
@@ -95,7 +97,7 @@ export default function AnchorPairs({ data, total }) {
                 onClick={() => handleSort('count')}
                 aria-sort={sortConfig.key === 'count' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
-                {t('stats.count')} <SortIcon column="count" />
+                {t('stats.count')} <SortIcon sortConfig={sortConfig} column="count" />
               </th>
               <th
                 scope="col"
@@ -103,7 +105,7 @@ export default function AnchorPairs({ data, total }) {
                 onClick={() => handleSort('percentage')}
                 aria-sort={sortConfig.key === 'percentage' ? (sortConfig.direction === 'desc' ? 'descending' : 'ascending') : 'none'}
               >
-                % <SortIcon column="percentage" />
+                % <SortIcon sortConfig={sortConfig} column="percentage" />
               </th>
             </tr>
           </thead>

@@ -24,6 +24,27 @@ const anchorColors = {
   LS: '#14B8A6',
 };
 
+const CustomTooltip = ({ active, payload, chartData, lang }) => {
+  if (active && payload && payload.length) {
+    const industryData = chartData.find(g => g.fullName === payload[0].payload.fullName);
+    const anchorTranslations = translations[lang]?.anchors || {};
+    return (
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50 max-w-xs">
+        <p className="font-semibold text-slate-100 mb-2">
+          {payload[0].payload.fullName}
+          <span className="text-slate-400 font-normal ml-1">({industryData?.total})</span>
+        </p>
+        {payload.map((entry, index) => (
+          <p key={index} style={{ color: entry.color }} className="text-sm">
+            {anchorTranslations[entry.name]?.name || entry.name}: <span className="font-semibold">{entry.value}%</span>
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function IndustryStats({ data }) {
   const { lang } = useLang();
 
@@ -117,26 +138,7 @@ export default function IndustryStats({ data }) {
 
   const totalResponses = chartData.reduce((sum, ind) => sum + ind.total, 0);
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const industryData = chartData.find(g => g.fullName === payload[0].payload.fullName);
-      const anchorTranslations = translations[lang]?.anchors || {};
-      return (
-        <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 shadow-xl z-50 max-w-xs">
-          <p className="font-semibold text-slate-100 mb-2">
-            {payload[0].payload.fullName}
-            <span className="text-slate-400 font-normal ml-1">({industryData?.total})</span>
-          </p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
-              {anchorTranslations[entry.name]?.name || entry.name}: <span className="font-semibold">{entry.value}%</span>
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   return (
     <div className="glass rounded-xl p-4 sm:p-6">
@@ -194,7 +196,7 @@ export default function IndustryStats({ data }) {
                   width={40}
                 />
               )}
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip content={<CustomTooltip chartData={chartData} lang={lang} />} />
               {isMobile ? null : (
                 <Legend
                   wrapperStyle={{ fontSize: '10px', lineHeight: '16px', paddingTop: '10px' }}
